@@ -1,0 +1,17 @@
+# Your project structure
+/backend/.env
+/backend/.env.*
+/frontend/.env
+/frontend/.env.*
+
+# But allow example files
+!.env.example
+
+# Database files (if any)
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads directory
+/uploads/
+/temp/
