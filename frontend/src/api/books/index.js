@@ -119,3 +119,27 @@ export const getBookSummary = async (id) => {
     handleApiError(error);
   }
 };
+
+
+// Get reviews for a book
+export const getReviews = async (bookId) => {
+  try {
+    const response = await api.get(`/books/${bookId}/reviews`);
+    // Return the array directly
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    throw error;
+  }
+};
+
+// Add a review for a book
+export const addReview = async (bookId, reviewData) => {
+  try {
+    const response = await api.post(`/books/${bookId}/reviews`, reviewData);
+    return response.data;
+  } catch (error) {
+    console.error('Error adding review:', error);
+    throw error;
+  }
+};

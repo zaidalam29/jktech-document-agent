@@ -4,6 +4,8 @@ from unittest.mock import patch, MagicMock, AsyncMock
 from app.database.models import Book, Review
 from datetime import datetime
 import asyncio
+from app.core.auth import get_current_user
+
 
 class TestSearch:
     def test_search_post(self, client: TestClient, sample_book):
@@ -80,17 +82,54 @@ class TestSearch:
         # This is actually testing the real endpoint behavior
 
     def test_debug_embeddings(self, client: TestClient):
-        """Test debug embeddings endpoint"""
-        with patch('app.main.rag_pipeline.get_document_count') as mock_count:
-            mock_count.return_value = 5
-            
-            response = client.get("/debug/embeddings")
-        
-        print(f"Debug embeddings response: {response.status_code}")
-        print(f"Response body: {response.json()}")
-        
+        from app.main import app, rag_pipeline
+        from app.database.models import Book
+
+        #  Fake logged-in user
+        class FakeUser:
+            id = 1
+
+        #  Override auth dependency
+        app.dependency_overrides[get_current_user] = lambda: FakeUser()
+
+        #  Fake embeddings store
+        rag_pipeline.embeddings_store = {
+            1: {
+                "embedding": [0.1, 0.2, 0.3],
+                "content": "This is test book content",
+                "metadata": {
+                    "title": "Test Book"
+                }
+            }
+        }
+
+        #  Mock DB execute
+        mock_result = MagicMock()
+        mock_book = MagicMock(spec=Book)
+        mock_book.id = 1
+        mock_book.user_id = 1
+        mock_result.scalar_one_or_none.return_value = mock_book
+
+        rag_pipeline.db = MagicMock()
+        rag_pipeline.db.execute = AsyncMock(return_value=mock_result)
+
+        #  Call endpoint
+        response = client.get("/debug/embeddings")
+
+        print(response.json())
+
+        #  Assertions
         assert response.status_code == 200
-        assert "total_books_indexed" in response.json()
+        assert response.json()["rag_pipeline_initialized"] is True
+        assert response.json()["total_books_indexed"] == 1
+        assert len(response.json()["user_books_indexed"]) == 1
+
+        #  Cleanup
+        app.dependency_overrides.clear()
+
+
+
+
 
 class TestRecommendations:
     def test_recommendations(self, client: TestClient, sample_book):

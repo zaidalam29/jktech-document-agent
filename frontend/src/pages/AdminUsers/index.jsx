@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import DataTable from 'react-data-table-component';
 import Swal from 'sweetalert2';
 import { getUsers, createUser, deleteUser, updateUser, getRoles, createRole, deleteRole } from "../../api/admin";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminUsers() {
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,49 +15,70 @@ export default function AdminUsers() {
   const [newUser, setNewUser] = useState({ 
     username: '', 
     password: '', 
-    role_name: '' // Changed to single role
+    role_name: ''
   });
   const [newRole, setNewRole] = useState({ name: '' });
   const [editingUser, setEditingUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false); // Add this state
 
-  const loadUsers = async () => {
-    try {
-      const res = await getUsers();
-      setUsers(res.data);
-    } catch (error) {
-      console.error('Failed to load users:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to load users',
-        timer: 2000
-      });
-    }
-  };
-
-  const loadRoles = async () => {
-    try {
-      const res = await getRoles();
-      setRoles(res.data);
-    } catch (error) {
-      console.error('Failed to load roles:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Failed to load roles',
-        timer: 2000
-      });
-    }
-  };
-
+  // Check role from localStorage - ALWAYS called
   useEffect(() => {
-    const loadData = async () => {
-      await Promise.all([loadUsers(), loadRoles()]);
-      setLoading(false);
-    };
-    loadData();
-  }, []);
+    const role = localStorage.getItem("role");
+    
+    if (role !== "admin") {
+      Swal.fire({
+        icon: 'error',
+        title: 'Access Denied',
+        text: 'You are not authorized to access this page. Only admins can access.',
+        confirmButtonText: 'Go to back',
+        showCancelButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      }).then(() => {
+        navigate("/books");
+      });
+    } else {
+      setIsAdmin(true); // Set admin status if role is admin
+    }
+  }, [navigate]);
 
+  // Load data ONLY if admin
+  useEffect(() => {
+    if (isAdmin) {
+      const loadData = async () => {
+        try {
+          const [usersRes, rolesRes] = await Promise.all([getUsers(), getRoles()]);
+          setUsers(usersRes.data);
+          setRoles(rolesRes.data);
+        } catch (error) {
+          console.error('Failed to load data:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to load data',
+            timer: 2000
+          });
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadData();
+    }
+  }, [isAdmin]); // Run when isAdmin changes
+
+  // If not admin, show redirect message
+  if (!isAdmin) {
+    return (
+      <div className="container">
+        <div className="card" style={{ textAlign: 'center', padding: '50px' }}>
+          <h3>Redirecting to books page...</h3>
+          <p>Please wait while we redirect you.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Rest of your functions remain the same...
   const handleAddUser = async (e) => {
     e.preventDefault();
     if (!newUser.username || !newUser.password || !newUser.role_name) {
@@ -72,13 +95,17 @@ export default function AdminUsers() {
       const userData = {
         username: newUser.username,
         password: newUser.password,
-        role_names: [newUser.role_name] // Send as array with single role
+        role_names: [newUser.role_name]
       };
       
       await createUser(userData);
       setNewUser({ username: '', password: '', role_name: '' });
       setShowAddUserForm(false);
-      await loadUsers();
+      
+      // Reload users
+      const usersRes = await getUsers();
+      setUsers(usersRes.data);
+      
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -109,11 +136,14 @@ export default function AdminUsers() {
     }
 
     try {
-      // Send role_name as query parameter
       await createRole(newRole.name);
       setNewRole({ name: '' });
       setShowAddRoleForm(false);
-      await loadRoles();
+      
+      // Reload roles
+      const rolesRes = await getRoles();
+      setRoles(rolesRes.data);
+      
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -146,7 +176,11 @@ export default function AdminUsers() {
     if (result.isConfirmed) {
       try {
         await deleteUser(id);
-        await loadUsers();
+        
+        // Reload users
+        const usersRes = await getUsers();
+        setUsers(usersRes.data);
+        
         Swal.fire({
           icon: 'success',
           title: 'Deleted!',
@@ -180,7 +214,11 @@ export default function AdminUsers() {
     if (result.isConfirmed) {
       try {
         await deleteRole(id);
-        await loadRoles();
+        
+        // Reload roles
+        const rolesRes = await getRoles();
+        setRoles(rolesRes.data);
+        
         Swal.fire({
           icon: 'success',
           title: 'Deleted!',
@@ -202,7 +240,6 @@ export default function AdminUsers() {
   const handleEditUser = (user) => {
     setEditingUser(user);
     
-    // Get the first role if user has multiple roles
     let userRole = '';
     if (Array.isArray(user.roles) && user.roles.length > 0) {
       userRole = user.roles[0];
@@ -235,7 +272,7 @@ export default function AdminUsers() {
     try {
       const updateData = {
         username: newUser.username,
-        role_names: [newUser.role_name] // Send as array
+        role_names: [newUser.role_name]
       };
       
       if (newUser.password.trim()) {
@@ -246,7 +283,11 @@ export default function AdminUsers() {
       setEditingUser(null);
       setNewUser({ username: '', password: '', role_name: '' });
       setShowAddUserForm(false);
-      await loadUsers();
+      
+      // Reload users
+      const usersRes = await getUsers();
+      setUsers(usersRes.data);
+      
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -280,9 +321,9 @@ export default function AdminUsers() {
       name: 'Role',
       selector: row => {
         if (Array.isArray(row.roles) && row.roles.length > 0) {
-          return row.roles[0]; // Show first role only
+          return row.roles[0];
         } else if (Array.isArray(row.role_names) && row.role_names.length > 0) {
-          return row.role_names[0]; // Show first role only
+          return row.role_names[0];
         } else if (row.role) {
           return row.role;
         }
@@ -324,7 +365,6 @@ export default function AdminUsers() {
       selector: row => row.name,
       sortable: true,
     },
-
   ];
 
   return (

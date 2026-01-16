@@ -2,10 +2,10 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-# ✅ CORRECT: Import Base from database ONLY
+#  CORRECT: Import Base from database ONLY
 from app.database.database import Base
 
-# ✅ Define association table using the imported Base
+#  Define association table using the imported Base
 user_roles = Table(
     "user_roles",
     Base.metadata,
@@ -21,6 +21,11 @@ class Book(Base):
     genre = Column(String)
     year_published = Column(Integer)
     summary = Column(Text)
+    #  CHANGE 1: user_id column add kiya
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
+    
+    #  Relationship for user
+    user = relationship("User", back_populates="books")
     reviews = relationship("Review", back_populates="book")
 
 class Review(Base):
@@ -32,6 +37,19 @@ class Review(Base):
     rating = Column(Float)
     book = relationship("Book", back_populates="reviews")
 
+# app/database/models.py
+class AuthToken(Base):
+    __tablename__ = "auth_tokens"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+    token = Column(String, nullable=False)
+    is_revoked = Column(Boolean, default=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    # Optional: Add relationship
+    user = relationship("User", back_populates="tokens")
+
+# User model mein bhi relationship add karo:
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
@@ -45,6 +63,9 @@ class User(Base):
         back_populates="users",
         lazy="selectin"
     )
+    books = relationship("Book", back_populates="user", cascade="all, delete-orphan")
+    documents = relationship("Document", back_populates="user", cascade="all, delete-orphan")
+    tokens = relationship("AuthToken", back_populates="user", cascade="all, delete-orphan")  #  Add this
 
 class Role(Base):
     __tablename__ = "roles"
@@ -57,14 +78,6 @@ class Role(Base):
         lazy="selectin"
     )
 
-class AuthToken(Base):
-    __tablename__ = "auth_tokens"
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
-    token = Column(String, nullable=False)
-    is_revoked = Column(Boolean, default=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-
 class Document(Base):
     __tablename__ = "documents"
     
@@ -73,10 +86,16 @@ class Document(Base):
     file_size = Column(Integer)
     uploaded_at = Column(DateTime(timezone=True), server_default=func.now())
     uploaded_by = Column(Integer, nullable=True)
+    #  CHANGE 2: user_id column add kiya
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=True)
     status = Column(String, default="uploaded")
     local_path = Column(String, nullable=True)  
     file_type = Column(String, default="document") 
     content = Column(Text, nullable=True)
+    
+    #  Relationship
+    user = relationship("User", back_populates="documents")
+    jobs = relationship("IngestionJob", back_populates="document", cascade="all, delete-orphan")
 
 class IngestionJob(Base):
     __tablename__ = "ingestion_jobs"
@@ -84,3 +103,6 @@ class IngestionJob(Base):
     document_id = Column(Integer, ForeignKey("documents.id"))
     status = Column(String(50), default="pending")
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    #  Relationship
+    document = relationship("Document", back_populates="jobs")

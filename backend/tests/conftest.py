@@ -4,13 +4,15 @@ import asyncio
 from fastapi.testclient import TestClient
 from unittest.mock import AsyncMock, MagicMock, patch, Mock
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.main import app
 from app.database.database import get_db
 from app.database.models import User, Role, Book, Review, Document
 from app.core.security import hash_password, create_access_token
 import os
 from types import SimpleNamespace
+from app.core.auth import verify_admin
+from app.core.auth import get_current_user
+
 
 # Set testing environment
 os.environ["TESTING"] = "true"
@@ -136,22 +138,39 @@ def mock_book():
     return mock
 
 # ==================== FIXED CLIENT WITH PROPER AUTH ====================
+class MockAdminUser:
+    def __init__(self):
+        self.id = 1
+        self.username = "admin"
+        self.roles = ["admin"]
+        
+class MockUser:
+    def __init__(self):
+        self.id = 1
+        self.username = "testuser"
+        self.roles = ["user"]
+
 
 @pytest.fixture
 def client(mock_db_session):
-    def override_get_db():
+
+    async def override_get_db():
         yield mock_db_session
 
+    async def override_get_current_user():
+        return MockUser()
+    
+    async def override_verify_admin():
+        # 🔥 Admin user bypass
+        return MockAdminUser()
+    
+    # 🔥 OVERRIDES
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[verify_admin] = override_verify_admin
+    app.dependency_overrides[get_current_user] = override_get_current_user
 
-    with patch('app.main.rag_pipeline') as mock_rag:
-        mock_rag.index_book = AsyncMock()
-        mock_rag.search_similar_books = Mock(return_value=[])
-
-        with patch('app.main.generate_summary_llama3', AsyncMock(return_value="Generated summary")):
-            with patch('app.main.generate_summary', AsyncMock(return_value="Review summary")):
-                with TestClient(app) as test_client:
-                    yield test_client
+    test_client = TestClient(app)
+    yield test_client
 
     app.dependency_overrides.clear()
 
