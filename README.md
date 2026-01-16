@@ -289,13 +289,13 @@ jktech-document-agent/
 
 ## Verification & Admin Access
 
-### ✅ All Tests Passed
+### All Tests Passed
 ![Test Results](screenshots/tests-passed.png)
 
-### 🔐 Default Admin Login
+### Default Admin Login
 ![Admin Credentials](screenshots/admin-credentials.png)
-**Username:** `admin`  
-**Password:** `12345678`
+- **Username:** `admin`  
+- **Password:** `12345678`
 ---
 
 © 2026 Zaid Alam
