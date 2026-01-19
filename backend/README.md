@@ -177,7 +177,7 @@ pip install -r requirements.txt
 ### Environment (.env)
 
 ```env
-DB_HOST=localhost
+DB_HOST=localhost  // DB_HOST=db in docker container
 DB_PORT=5432
 DB_NAME=jktech_document_agent
 DB_USER=postgres
