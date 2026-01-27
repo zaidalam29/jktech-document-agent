@@ -1,0 +1,87 @@
+{
+  "999": {
+    "filename": "test_ai.txt",
+    "file_type": "text",
+    "author": "Test User",
+    "description": "Test document for RAG",
+    "chunks_count": 2,
+    "indexed_at": "2026-01-25T22:21:53.635781",
+    "total_words": 18
+  },
+  "3": {
+    "document_id": 3,
+    "filename": "premchand.txt",
+    "file_type": "text",
+    "uploaded_by": 2,
+    "user_id": 2,
+    "uploaded_at": "2026-01-25 23:20:14.681624+05:30",
+    "chunks_count": 2,
+    "indexed_at": "2026-01-25T23:20:39.700553",
+    "total_words": 298
+  },
+  "4": {
+    "document_id": 4,
+    "filename": "capitals.txt",
+    "file_type": "text",
+    "uploaded_by": 2,
+    "user_id": 2,
+    "uploaded_at": "2026-01-25 23:37:30.877962+05:30",
+    "chunks_count": 1,
+    "indexed_at": "2026-01-25T23:39:34.373374",
+    "total_words": 74
+  },
+  "5": {
+    "document_id": 5,
+    "filename": "prophet.pdf",
+    "file_type": "pdf",
+    "uploaded_by": 2,
+    "user_id": 2,
+    "uploaded_at": "2026-01-26 00:25:51.687451+05:30",
+    "chunks_count": 1,
+    "indexed_at": "2026-01-26T00:26:01.006996",
+    "total_words": 9
+  },
+  "6": {
+    "document_id": 6,
+    "filename": "jesus.txt",
+    "file_type": "text",
+    "uploaded_by": 2,
+    "user_id": 2,
+    "uploaded_at": "2026-01-26 00:29:50.930198+05:30",
+    "chunks_count": 2,
+    "indexed_at": "2026-01-26T00:30:41.362049",
+    "total_words": 314
+  },
+  "7": {
+    "document_id": 7,
+    "filename": "muhammad.pdf",
+    "file_type": "pdf",
+    "uploaded_by": 2,
+    "user_id": 2,
+    "uploaded_at": "2026-01-26 00:53:46.147569+05:30",
+    "extraction_method": "unknown",
+    "extraction_details": "{\"methods_tried\": [\"pymupdf\"], \"successful_method\": \"pymupdf\", \"char_count\": 2142, \"file_size\": 39046, \"word_count\": 348, \"pages\": 1}",
+    "content_preview": "PDF Document: muhammad.pdf\n\n--- ORIGINAL EXTRACTED TEXT ---\nProphet Muhammad (S.A.W) was the final prophet and messenger of Islam, whose life and teachings laid the foundation for a global faith follo...",
+    "embedding_service": "openrouter",
+    "embedding_dimension": 1536,
+    "indexed_at": "2026-01-26T00:54:40.617885",
+    "chunks_count": 4,
+    "total_words": 523
+  },
+  "8": {
+    "document_id": 8,
+    "filename": "kanpur.txt",
+    "file_type": "text",
+    "uploaded_by": 2,
+    "user_id": 2,
+    "uploaded_at": "2026-01-26 00:58:35.228817+05:30",
+    "extraction_method": "direct_text",
+    "extraction_details": "{\"method\": \"direct_text\", \"source\": \"database\"}",
+    "content_preview": "Kanpur, located in the central-western part of Uttar Pradesh on the south bank of the River Ganges, is the state's largest city and a major industrial hub. As of 2026, it remains a critical economic p...",
+    "embedding_service": "openrouter",
+    "embedding_dimension": 1536,
+    "indexed_at": "2026-01-26T00:58:56.306818",
+    "chunks_count": 2,
+    "total_words": 374
+  }
+}

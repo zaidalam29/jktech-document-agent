@@ -1,49 +1,42 @@
 {
-  "name": "Jktech-Frontend",
-  "version": "0.1.0",
+  "name": "jktech frontend",
   "private": true,
-  "dependencies": {
-    "@testing-library/dom": "^10.4.1",
-    "axios": "^1.13.2",
-    "bootstrap": "^5.3.8",
-    "lucide-react": "^0.562.0",
-    "react": "^19.2.3",
-    "react-data-table-component": "^7.7.0",
-    "react-dom": "^19.2.3",
-    "react-router-dom": "^7.12.0",
-    "react-scripts": "5.0.1",
-    "sweetalert2": "^11.26.17",
-    "web-vitals": "^2.1.4"
-  },
+  "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite --mode development",
+    "build": "vite build --mode production",
+    "build:staging": "vite build --mode staging",
+    "build:development": "vite build --mode development",
+    "preview": "vite preview",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write \"src/**/*.{js,jsx,json}\"",
+    "env:check": "node -e \"require('dotenv').config(); console.log('ENV check:', process.env.VITE_API_URL)\""
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "dependencies": {
+    "axios": "^1.13.3",
+    "lucide-react": "^0.563.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.0",
+    "sweetalert2": "^11.26.17"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
     "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.1",
+    "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "jest": "^27.5.1",
-    "vitest": "^4.0.17"
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "jest": "^30.2.0",
+    "prettier": "^3.8.1",
+    "vite": "^7.2.4"
   }
 }

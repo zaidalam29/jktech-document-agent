@@ -1,0 +1,38 @@
+/* Custom SweetAlert2 Styles */
+.swal2-popup {
+  border-radius: 12px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.swal2-title {
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+.swal2-html-container {
+  font-size: 1rem !important;
+  color: #666 !important;
+}
+
+.swal2-confirm {
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-weight: 500 !important;
+}
+
+.swal2-cancel {
+  border-radius: 8px !important;
+  padding: 10px 24px !important;
+  font-weight: 500 !important;
+}
+
+/* Toast notifications */
+.swal2-toast {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Loading spinner */
+.swal2-loader {
+  border-color: #667eea transparent #667eea transparent !important;
+}

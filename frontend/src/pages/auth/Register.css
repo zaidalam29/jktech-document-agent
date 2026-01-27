@@ -1,0 +1,197 @@
+.register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  /* background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); */
+  position: relative;
+  overflow: hidden;
+}
+
+.register-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,197.3C672,192,768,160,864,154.7C960,149,1056,171,1152,176C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+  background-size: cover;
+  background-position: bottom;
+  opacity: 0.2;
+}
+
+.register-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 1;
+  animation: cardEntrance 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.register-header h1 {
+  font-size: 2.2rem;
+  color: #333;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.register-header p {
+  color: #666;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.register-form {
+  margin-bottom: 30px;
+}
+
+.form-terms {
+  margin: 30px 0;
+  padding: 20px;
+  background: rgba(79, 172, 254, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(79, 172, 254, 0.1);
+}
+
+.form-terms .checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: #555;
+  font-size: 0.9rem;
+  cursor: pointer;
+  line-height: 1.5;
+  user-select: none;
+}
+
+.form-terms .checkbox input {
+  margin-top: 3px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: #4facfe;
+}
+
+.form-terms .checkbox a {
+  color: #4facfe;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+  border-bottom: 1px dotted #4facfe;
+}
+
+.form-terms .checkbox a:hover {
+  color: #00f2fe;
+  border-bottom: 1px solid #00f2fe;
+}
+
+.error-text {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 8px;
+  margin-left: 28px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.register-button {
+  margin-bottom: 25px !important;
+  transition: all 0.3s !important;
+}
+
+.register-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4) !important;
+}
+
+.login-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  color: #666;
+  font-size: 0.95rem;
+  margin-top: 25px;
+  padding: 20px;
+  background: rgba(79, 172, 254, 0.05);
+  border-radius: 12px;
+}
+
+.login-button {
+  color: #4facfe;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+  padding: 10px 24px;
+  border-radius: 8px;
+  background: rgba(79, 172, 254, 0.1);
+}
+
+.login-button:hover {
+  color: #00f2fe;
+  background: rgba(79, 172, 254, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.2);
+}
+
+/* Password strength indicator */
+.password-strength {
+  margin-top: 8px;
+  height: 4px;
+  background: #eee;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.password-strength-bar {
+  height: 100%;
+  transition: width 0.3s;
+  border-radius: 2px;
+}
+
+.password-strength.weak .password-strength-bar {
+  background: #ff6b6b;
+  width: 33%;
+}
+
+.password-strength.medium .password-strength-bar {
+  background: #ffd93d;
+  width: 66%;
+}
+
+.password-strength.strong .password-strength-bar {
+  background: #4CAF50;
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .register-card {
+    padding: 30px 20px;
+    margin: 0 10px;
+  }
+  
+  .register-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .form-terms {
+    padding: 15px;
+  }
+}

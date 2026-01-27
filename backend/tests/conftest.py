@@ -1,260 +1,327 @@
-import pytest
-import pytest_asyncio  # Add this import
-import asyncio
-from fastapi.testclient import TestClient
-from unittest.mock import AsyncMock, MagicMock, patch, Mock
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.main import app
-from app.database.database import get_db
-from app.database.models import User, Role, Book, Review, Document
-from app.core.security import hash_password, create_access_token
 import os
-from types import SimpleNamespace
-from app.core.auth import verify_admin
-from app.core.auth import get_current_user
+import pytest
+from typing import Dict, Any, Generator
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.pool import StaticPool
+import logging
+from datetime import datetime, timedelta
+from unittest.mock import patch
+
+# Import your actual modules
+from app.core.database import Base, get_db
+from app.main import app
+from app.core.config import settings
+from app.models.user import User, Role
+from app.models.auth_token import AuthToken
+import app.core.security as security_module
+
+# Configure test logging
+logging.basicConfig(level=logging.WARNING)
+logger = logging.getLogger(__name__)
+
+# Override settings for testing
+settings.DEBUG = True
+settings.TESTING = True
+
+# Use SQLite in-memory database for testing
+TEST_DATABASE_URL = "sqlite:///:memory:"
+
+print("\n" + "="*60)
+print("🚀 Setting up SQLite in-memory database for tests")
+print("="*60 + "\n")
+
+# Create test engine
+test_engine = create_engine(
+    TEST_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
+    echo=False,
+)
+
+# Create test session
+TestingSessionLocal = sessionmaker(
+    autocommit=False, 
+    autoflush=False, 
+    bind=test_engine
+)
 
 
-# Set testing environment
-os.environ["TESTING"] = "true"
+def override_get_db() -> Generator[Session, None, None]:
+    """
+    Override the get_db dependency for testing
+    """
+    db = TestingSessionLocal()
+    try:
+        yield db
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
 
-# ==================== MOCK DB SESSION (ONE DEFINITION ONLY) ====================
 
-@pytest_asyncio.fixture  # Change to pytest_asyncio.fixture
-async def mock_db_session():
-    """Create a mock database session"""
-    session = AsyncMock(spec=AsyncSession)
+# Override the database dependency
+app.dependency_overrides[get_db] = override_get_db
+
+
+@pytest.fixture(scope="session", autouse=True)
+def setup_test_database():
+    """
+    Create all tables before tests
+    """
+    print("📦 Creating database tables...")
+    Base.metadata.create_all(bind=test_engine)
+    print("✅ Tables created successfully")
     
-    # Mock execute method
-    mock_result = MagicMock()
-    mock_scalars = MagicMock()
-    mock_scalars.all.return_value = []
-    mock_result.scalars.return_value = mock_scalars
-    mock_result.scalar_one_or_none.return_value = None
-    session.execute.return_value = mock_result
+    yield
     
-    # Mock async methods properly
-    session.commit = AsyncMock()
-    session.flush = AsyncMock()
-    session.refresh = AsyncMock()
-    session.delete = AsyncMock()
-    session.add = Mock()
-    session.close = AsyncMock()
-    
-    # Additional async methods
-    session.begin = AsyncMock()
-    session.begin_nested = AsyncMock()
-    
-    # Return the session
-    yield session
+    print("\n🧹 Cleaning up...")
+    Base.metadata.drop_all(bind=test_engine)
+    print("✅ Cleanup completed")
 
-# ==================== SAMPLE BOOK FIXTURE ====================
 
 @pytest.fixture
-def sample_book():
-    """Create a sample book for testing"""
-    book = Book(
-        id=1,
-        title="Clean Code",
-        author="Robert C. Martin",
-        genre="Science",
-        year_published=2026
+def db_session() -> Generator[Session, None, None]:
+    """
+    Create a fresh database session for each test
+    """
+    connection = test_engine.connect()
+    transaction = connection.begin()
+    session = TestingSessionLocal(bind=connection)
+    
+    try:
+        yield session
+    finally:
+        session.close()
+        transaction.rollback()
+        connection.close()
+
+
+@pytest.fixture
+def client(db_session: Session) -> TestClient:
+    """
+    Create test client
+    """
+    return TestClient(app)
+
+
+@pytest.fixture
+def test_user_data() -> Dict[str, Any]:
+    """Sample test user data"""
+    return {
+        "username": "testuser",
+        "password": "TestPass123!",
+    }
+
+
+@pytest.fixture
+def setup_roles(db_session: Session):
+    """Setup roles in database"""
+    # Create roles if they don't exist
+    user_role = db_session.query(Role).filter(Role.name == "user").first()
+    if not user_role:
+        user_role = Role(name="user")  # No description parameter
+        db_session.add(user_role)
+    
+    admin_role = db_session.query(Role).filter(Role.name == "admin").first()
+    if not admin_role:
+        admin_role = Role(name="admin")  # No description parameter
+        db_session.add(admin_role)
+    
+    db_session.commit()
+    return {"user": user_role, "admin": admin_role}
+
+
+@pytest.fixture
+def test_user(db_session: Session, test_user_data: Dict, setup_roles) -> User:
+    """Create a test user in database"""
+    # Check if user exists
+    existing_user = db_session.query(User).filter(
+        User.username == test_user_data["username"]
+    ).first()
+    
+    if existing_user:
+        return existing_user
+    
+    # Get user role
+    user_role = db_session.query(Role).filter(Role.name == "user").first()
+    
+    # Create user
+    user = User(
+        username=test_user_data["username"],
+        password_hash=security_module.get_password_hash(test_user_data["password"]),
+        is_active=True,
     )
-    # Add summary attribute
-    book.summary = None
-    # Add reviews attribute
-    book.reviews = []
     
-    # Add dict method for Pydantic serialization
-    def to_dict():
-        return {
-            'id': book.id,
-            'title': book.title,
-            'author': book.author,
-            'genre': book.genre,
-            'year_published': book.year_published,
-            'summary': book.summary,
-            'reviews': book.reviews
-        }
+    if user_role:
+        user.roles.append(user_role)
     
-    book.dict = to_dict
-    book.model_dump = to_dict
+    db_session.add(user)
+    db_session.commit()
+    db_session.refresh(user)
     
-    return book
-
-# ==================== FIXED MOCK BOOK (KEEP THIS FOR SYNC TESTS) ====================
-
-@pytest.fixture
-def mock_book():
-    """Create a properly mock book with all required attributes"""
-    # Create a simple class that will serialize correctly
-    class SerializableBook:
-        def __init__(self):
-            self.id = 1
-            self.title = "Test Book"
-            self.author = "Test Author"
-            self.genre = "Science"
-            self.year_published = 2026
-            self.summary = "Test summary"
-            self.reviews = []
-        
-        def dict(self):
-            # For Pydantic serialization
-            return {
-                'id': self.id,
-                'title': self.title,
-                'author': self.author,
-                'genre': self.genre,
-                'year_published': self.year_published,
-                'summary': self.summary
-            }
-    
-    book = SerializableBook()
-    
-    # Also wrap it in a MagicMock for database interactions
-    mock = MagicMock(spec=Book, wraps=book)
-    
-    # Set all attributes
-    mock.id = 1
-    mock.title = "Test Book"
-    mock.author = "Test Author"
-    mock.genre = "Science"
-    mock.year_published = 2026
-    mock.summary = "Test summary"
-    mock.reviews = []
-    
-    # Make sure dict() method works
-    mock.dict = book.dict
-    
-    # For Pydantic model_dump
-    mock.model_dump = Mock(return_value={
-        'id': 1,
-        'title': 'Test Book',
-        'author': 'Test Author',
-        'genre': 'Science',
-        'year_published': 2026,
-        'summary': 'Test summary'
-    })
-    
-    return mock
-
-# ==================== FIXED CLIENT WITH PROPER AUTH ====================
-class MockAdminUser:
-    def __init__(self):
-        self.id = 1
-        self.username = "admin"
-        self.roles = ["admin"]
-        
-class MockUser:
-    def __init__(self):
-        self.id = 1
-        self.username = "testuser"
-        self.roles = ["user"]
-
-
-@pytest.fixture
-def client(mock_db_session):
-
-    async def override_get_db():
-        yield mock_db_session
-
-    async def override_get_current_user():
-        return MockUser()
-    
-    async def override_verify_admin():
-        # 🔥 Admin user bypass
-        return MockAdminUser()
-    
-    # 🔥 OVERRIDES
-    app.dependency_overrides[get_db] = override_get_db
-    app.dependency_overrides[verify_admin] = override_verify_admin
-    app.dependency_overrides[get_current_user] = override_get_current_user
-
-    test_client = TestClient(app)
-    yield test_client
-
-    app.dependency_overrides.clear()
-
-# ==================== AUTH HEADERS FIX ====================
-
-@pytest.fixture
-def auth_headers():
-    """Create working auth headers"""
-    # Create a token that will pass verify_user
-    token = create_access_token({"sub": "testuser", "roles": ["user"]})
-    return {"Authorization": f"Bearer {token}"}
-
-# ==================== OTHER FIXTURES ====================
-
-@pytest.fixture
-def mock_user():
-    """Create a mock user"""
-    user = MagicMock(spec=User)
-    user.id = 1
-    user.username = "testuser"
-    user.password_hash = hash_password("testpass")
-    user.is_active = True
-    user.roles = []
     return user
 
+
 @pytest.fixture
-def mock_admin_user():
-    """Create a mock admin user"""
-    admin_role = MagicMock(spec=Role)
-    admin_role.name = "admin"
+def auth_token(db_session: Session, test_user: User) -> str:
+    """Create and return a valid auth token for test user"""
+    # Create token
+    access_token = security_module.create_access_token(
+        data={"sub": test_user.username, "user_id": test_user.id}
+    )
     
-    user = MagicMock(spec=User)
-    user.id = 1
-    user.username = "admin"
-    user.password_hash = hash_password("admin123")
-    user.is_active = True
-    user.roles = [admin_role]
+    # Save to database
+    expires_at = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    auth_token_record = AuthToken(
+        user_id=test_user.id,
+        token=access_token,
+        expires_at=expires_at,
+    )
+    
+    db_session.add(auth_token_record)
+    db_session.commit()
+    
+    return access_token
+
+
+@pytest.fixture
+def admin_user(db_session: Session, setup_roles) -> User:
+    """Create an admin user for testing"""
+    # Check if user exists
+    existing_admin = db_session.query(User).filter(User.username == "admin_user").first()
+    if existing_admin:
+        return existing_admin
+    
+    # Get admin role
+    admin_role = db_session.query(Role).filter(Role.name == "admin").first()
+    
+    # Create admin user
+    user = User(
+        username="admin_user",
+        password_hash=security_module.get_password_hash("AdminPass123!"),
+        is_active=True,
+    )
+    
+    if admin_role:
+        user.roles.append(admin_role)
+    
+    db_session.add(user)
+    db_session.commit()
+    db_session.refresh(user)
+    
     return user
 
-@pytest.fixture
-def admin_token():
-    """Create admin JWT token"""
-    return create_access_token({"sub": "admin", "roles": ["admin"]})
 
-def create_mock_verify_user(should_succeed=True):
-    """Create a mock verify_user function"""
-    from fastapi import HTTPException
+@pytest.fixture
+def admin_token(db_session: Session, admin_user: User) -> str:
+    """Create auth token for admin user"""
+    access_token = security_module.create_access_token(
+        data={"sub": admin_user.username, "user_id": admin_user.id}
+    )
     
-    def mock_verify():
-        if should_succeed:
-            return "testuser"
-        else:
-            raise HTTPException(status_code=401, detail="Invalid authentication credentials")
-    return mock_verify
+    expires_at = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    auth_token_record = AuthToken(
+        user_id=admin_user.id,
+        token=access_token,
+        expires_at=expires_at,
+    )
+    
+    db_session.add(auth_token_record)
+    db_session.commit()
+    
+    return access_token
+
 
 @pytest.fixture
-def mock_db():
+def inactive_user(db_session: Session, setup_roles) -> User:
+    """Create an inactive user for testing"""
+    # Get user role
+    user_role = db_session.query(Role).filter(Role.name == "user").first()
+    
+    user = User(
+        username="inactive_user",
+        password_hash=security_module.get_password_hash("TestPass123!"),
+        is_active=False,
+    )
+    
+    if user_role:
+        user.roles.append(user_role)
+    
+    db_session.add(user)
+    db_session.commit()
+    db_session.refresh(user)
+    
+    return user
+
+
+@pytest.fixture
+def headers(auth_token: str) -> Dict[str, str]:
+    """Return headers with authorization token"""
+    return {"Authorization": f"Bearer {auth_token}"}
+
+
+@pytest.fixture
+def admin_headers(admin_token: str) -> Dict[str, str]:
+    """Return headers with admin authorization token"""
+    return {"Authorization": f"Bearer {admin_token}"}
+
+# tests/conftest.py - Add this function
+
+@pytest.fixture
+def clean_token(db_session: Session, test_user: User) -> str:
+    """Create a clean token without duplicates"""
+    # Remove any existing tokens for this user
+    db_session.query(AuthToken).filter(AuthToken.user_id == test_user.id).delete()
+    db_session.commit()
+    
+    # Create new token
+    access_token = security_module.create_access_token(
+        data={"sub": test_user.username, "user_id": test_user.id}
+    )
+    
+    # Save to database
+    expires_at = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    auth_token_record = AuthToken(
+        user_id=test_user.id,
+        token=access_token,
+        expires_at=expires_at,
+    )
+    
+    db_session.add(auth_token_record)
+    db_session.commit()
+    
+    return access_token
+
+
+@pytest.fixture
+def clean_headers(clean_token: str) -> Dict[str, str]:
+    """Return headers with clean authorization token"""
+    return {"Authorization": f"Bearer {clean_token}"}
+
+
+@pytest.fixture(autouse=True)
+def extreme_cleanup(db_session: Session):
     """
-    Mock database session for testing
+    Extreme cleanup to avoid any conflicts
     """
-    db = MagicMock()
-    return db
-
-# ==================== TEST SETUP HELPERS ====================
-
-@pytest.fixture
-def setup_book_found(mock_db_session, mock_book):
-    """Setup for book found scenario"""
-    mock_result = MagicMock()
-    mock_result.scalar_one_or_none.return_value = mock_book
+    # Store current state
+    yield
     
-    mock_scalars = MagicMock()
-    mock_scalars.all.return_value = [mock_book]
-    mock_result.scalars.return_value = mock_scalars
-    
-    mock_db_session.execute.return_value = mock_result
-    return mock_db_session
-
-@pytest.fixture
-def setup_book_not_found(mock_db_session):
-    """Setup for book not found scenario"""
-    mock_result = MagicMock()
-    mock_result.scalar_one_or_none.return_value = None
-    mock_result.scalars.return_value.all.return_value = []
-    mock_db_session.execute.return_value = mock_result
-    return mock_db_session
-
+    # Clean EVERYTHING after each test
+    try:
+        # Delete all auth tokens
+        db_session.query(AuthToken).delete()
+        
+        # Delete all users (except maybe default roles)
+        db_session.query(User).filter(
+            User.username.notlike("role_%")
+        ).delete(synchronize_session=False)
+        
+        db_session.commit()
+    except Exception as e:
+        db_session.rollback()
+        logger.debug(f"Cleanup warning: {e}")
