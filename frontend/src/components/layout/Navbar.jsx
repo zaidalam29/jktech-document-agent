@@ -87,12 +87,6 @@ const Navbar = () => {
                       <span>Profile</span>
                     </button>
                     
-                    {user.roles?.includes('admin') && (
-                      <button onClick={handleSettingsClick} className="menu-item">
-                        <Settings size={16} />
-                        <span>Settings</span>
-                      </button>
-                    )}
                     
                     <div className="menu-divider"></div>
                     

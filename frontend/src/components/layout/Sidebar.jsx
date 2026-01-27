@@ -40,12 +40,6 @@ const Sidebar = () => {
       roles: ['user', 'admin', 'viewer'],
     },
     {
-      path: '/documents/upload',
-      label: 'Upload',
-      icon: <Upload size={20} />,
-      roles: ['user', 'admin'],
-    },
-    {
       path: '/ingestion',
       label: 'Ingestion',
       icon: <Database size={20} />,
@@ -57,12 +51,7 @@ const Sidebar = () => {
       icon: <MessageSquare size={20} />,
       roles: ['user', 'admin', 'viewer'],
     },
-    {
-      path: '/qa/history',
-      label: 'QA History',
-      icon: <MessageSquare size={20} />,
-      roles: ['user', 'admin', 'viewer'],
-    },
+ 
   ];
 
   const adminItems = [
@@ -70,18 +59,6 @@ const Sidebar = () => {
       path: '/admin/users',
       label: 'Users',
       icon: <Users size={20} />,
-      roles: ['admin'],
-    },
-    {
-      path: '/admin/settings',
-      label: 'Settings',
-      icon: <Settings size={20} />,
-      roles: ['admin'],
-    },
-    {
-      path: '/admin/analytics',
-      label: 'Analytics',
-      icon: <BarChart size={20} />,
       roles: ['admin'],
     },
   ];

@@ -1,4 +1,3 @@
-// src/app/Router.jsx में
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../store/auth.context';
@@ -15,13 +14,18 @@ const Profile = lazy(() => import('../pages/Profile/Profile'));
 const NotFound = lazy(() => import('../pages/NotFound'));
 const Unauthorized = lazy(() => import('../pages/Unauthorized'));
 
-// ✅ CORRECT LAZY IMPORTS FOR BOOKS PAGES
+// ✅ BOOKS PAGES
 const BooksList = lazy(() => import('../pages/books/BooksList'));
 const MyBooks = lazy(() => import('../pages/books/MyBooks'));
 const CreateBook = lazy(() => import('../pages/books/CreateBook'));
 const BookDetails = lazy(() => import('../pages/books/BookDetails'));
 const EditBook = lazy(() => import('../pages/books/EditBook'));
 
+// ✅ DOCUMENTS PAGES - Add These
+const DocumentsPage = lazy(() => import('../pages/documents/DocumentsPage'));
+
+const IngestionPage = lazy(() => import('../pages/ingestion/IngestionPage'));
+const QAPages = lazy(() => import('../pages/qa/QAPage'));
 // Loader for suspense
 const PageLoader = () => (
   <div className="page-loader">
@@ -86,12 +90,17 @@ const AppRouter = () => {
           <Route path={ROUTES.PRIVATE.DASHBOARD} element={<Dashboard />} />
           <Route path={ROUTES.PRIVATE.PROFILE} element={<Profile />} />
           
-          {/* ✅ BOOKS ROUTES - FIXED */}
+          {/* ✅ BOOKS ROUTES */}
           <Route path={ROUTES.PRIVATE.BOOKS.LIST} element={<BooksList />} />
           <Route path={ROUTES.PRIVATE.BOOKS.MY_BOOKS} element={<MyBooks />} />
           <Route path={ROUTES.PRIVATE.BOOKS.CREATE} element={<CreateBook />} />
           <Route path={ROUTES.PRIVATE.BOOKS.DETAILS} element={<BookDetails />} />
           <Route path={ROUTES.PRIVATE.BOOKS.EDIT} element={<EditBook />} />
+          
+          {/* ✅ DOCUMENTS ROUTES - NEWLY ADDED */}
+         <Route path={ROUTES.PRIVATE.DOCUMENTS.LIST} element={<DocumentsPage />} />
+         <Route path={ROUTES.PRIVATE.INGESTION} element={<IngestionPage />} />
+         <Route path={ROUTES.PRIVATE.QA.ASK} element={<QAPages />} />
           
           {/* Other routes... */}
         </Route>

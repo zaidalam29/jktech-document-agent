@@ -10,7 +10,6 @@ class OpenRouterLLMService:
         self.api_key = os.getenv("OPENROUTER_API_KEY")
         self.base_url = os.getenv("OPENROUTER_BASE_URL")
         self.model = os.getenv("AI_MODEL")
-        self.frontend_url = os.getenv("FRONTEND_URL")
         
         if not self.api_key:
             print("[LLM] OPENROUTER_API_KEY not found. Using dummy responses.")
@@ -20,7 +19,7 @@ class OpenRouterLLMService:
             self.headers = {
                 "Authorization": f"Bearer {self.api_key}",
                 "Content-Type": "application/json",
-                "HTTP-Referer": {self.frontend_url},
+                "HTTP-Referer": "http://localhost:3000",
                 "X-Title": "Book Management System"
             }
     

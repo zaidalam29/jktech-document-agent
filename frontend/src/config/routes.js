@@ -6,9 +6,8 @@ const ROUTES = {
   },
   PRIVATE: {
     DASHBOARD: '/dashboard',
-    DOCUMENTS: {
-      LIST: '/documents',
-      UPLOAD: '/documents/upload',
+     DOCUMENTS: {
+      LIST: '/documents',  
       VIEW: '/documents/:id',
     },
     INGESTION: '/ingestion',

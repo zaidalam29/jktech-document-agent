@@ -216,7 +216,7 @@ class DocumentRAGPipeline:
                 similarity = np.dot(query_embedding, chunk_embedding_norm)
                 
                 # LOWER THRESHOLD for better matching
-                if similarity > 0.2:  # Reduced from 0.5 to 0.2
+                if similarity > 0.5:  # Reduced from 0.5 to 0.2
                     results.append({
                         'document_id': doc_id,
                         'chunk_id': chunk.get('chunk_id', ''),
