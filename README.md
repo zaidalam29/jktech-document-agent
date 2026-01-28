@@ -267,6 +267,57 @@ VITE_MOCK_API_DELAY=500
 
 ## Run Project with Docker Compose
 
+#### Docker docker-compose.yml File
+
+```env
+services:
+  db:
+    image: postgres:15
+    container_name: jktech-postgres
+    environment:
+      POSTGRES_DB: bookdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Badshahkhan@123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: jktech-backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - db
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  frontend:
+    image: node:20-alpine  
+    container_name: jktech-frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+
+
+volumes:
+  postgres_data:
+
+```
+
+---
+
+
 ```bash
 # Stop old containers if running
 docker-compose down -v

@@ -23,7 +23,7 @@ services:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
   frontend:
-    image: node:20-alpine  # Node 20 use karo (Vite compatible)
+    image: node:20-alpine  
     container_name: jktech-frontend
     working_dir: /app
     volumes:
