@@ -30,6 +30,14 @@ Frontend is a **React application** served via **Nginx** with environment-based 
 
 ---
 
+## Folder Structure
+
+### Backend & Frontend Folder Structure
+![folder-structure](screenshots/folder-structure.png)
+
+
+---
+
 ## Core Modules
 
 ### Backend Modules
