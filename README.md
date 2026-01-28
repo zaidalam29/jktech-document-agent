@@ -180,19 +180,87 @@ npm install
 #### Backend `.env`
 
 ```env
-DB_HOST=db
-DB_PORT=5432
-DB_NAME=book_management
-DB_USER=postgres
-DB_PASSWORD=Badshahkhan@123
-LLM_KEY=your_api_key
-USE_S3=false
+# Application
+PROJECT_NAME=Book Management System
+VERSION=1.0.0
+API_V1_STR=/api/v1
+DEBUG=true
+
+# Database (PostgreSQL)
+POSTGRES_SERVER=db
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=db-password
+POSTGRES_DB=db-name
+POSTGRES_PORT=5432
+
+# Leave DATABASE_URL empty - it will be auto-constructed
+DATABASE_URL=
+
+# Security
+SECRET_KEY=secret-key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=120
+
+# Redis
+# REDIS_HOST=localhost
+# REDIS_PORT=6379
+# REDIS_PASSWORD=redis123
+# REDIS_DB=0
+
+# AI Service (OpenRouter)
+OPENROUTER_MODEL=meta-llama/llama-3-70b-instruct
+OPENROUTER_API_KEY=yor-key
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+AI_MODEL=meta-llama/llama-3-70b-instruct
+AI_MAX_TOKENS=1000
+AI_TEMPERATURE=0.7
+
+# CORS
+# BACKEND_CORS_ORIGINS=http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173,http://localhost:5174,http:localhost:3000,http://127.0.0.1:5174
+BACKEND_CORS_ORIGINS=http://localhost:3000,http://localhost:5173
+
+FRONTEND_URL=http://localhost:5173
+# Logging
+LOG_LEVEL=INFO
 ```
 
 #### Frontend `.env`
 
 ```env
-REACT_APP_API_URL=http://localhost:8000
+# API Configuration
+VITE_API_URL=http://localhost:8000/api/v1
+
+# Environment
+VITE_ENV=development
+VITE_APP_NAME="Document QA System"
+VITE_APP_VERSION=1.0.0
+
+# Features
+VITE_FEATURE_REGISTRATION=true
+VITE_FEATURE_FILE_UPLOAD=true
+VITE_FEATURE_DARK_MODE=true
+VITE_FEATURE_MULTI_LANGUAGE=false
+
+# Application Limits
+VITE_MAX_UPLOAD_SIZE=10485760
+VITE_SESSION_TIMEOUT=1800000
+VITE_PAGE_SIZE=10
+VITE_MAX_FILE_COUNT=10
+VITE_AUTO_LOGOUT_MINUTES=60
+
+# Logging
+VITE_LOG_LEVEL=debug
+VITE_ENABLE_CONSOLE_LOG=true
+
+# Monitoring
+VITE_SENTRY_DSN=
+VITE_GOOGLE_ANALYTICS_ID=
+
+# Development Flags
+VITE_DEBUG=true
+VITE_SHOW_DEV_TOOLS=true
+VITE_USE_MOCK_API=false
+VITE_MOCK_API_DELAY=500
 ```
 
 ---
@@ -247,25 +315,6 @@ docker-compose down
 # CI/CD snippet
 - name: Build & Deploy
   run: docker-compose up --build -d
-```
-
----
-
-## Project Structure
-
-```
-jktech-document-agent/
-├── backend/
-│   ├── app/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── .env
-├── frontend/
-│   ├── src/
-│   ├── Dockerfile
-│   └── .env
-├── docker-compose.yml
-└── README.md
 ```
 
 ---
