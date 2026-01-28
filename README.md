@@ -28,13 +28,6 @@ All documents are stored locally and indexed for **semantic retrieval**.
 
 Frontend is a **React application** served via **Nginx** with environment-based configuration to connect with the backend.
 
----
-
-## Folder Structure
-
-### Backend & Frontend Folder Structure
-![folder-structure](screenshots/folder-structure.png)
-
 
 ---
 
@@ -100,53 +93,122 @@ docker-compose build frontend
 * ReDoc: `http://localhost:8000/redoc`
 
 ### Main Endpoints
+# Book Management System API
 
-#### Authentication
+## API Endpoints
 
-* `POST /auth/signup` – Register user
-* `POST /auth/login` – Login and receive JWT
-* `POST /auth/logout` – Logout
-* `POST /auth/create-admin` – Create admin
+### Authentication
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/v1/auth/signup` | Register new user | No |
+| POST | `/api/v1/auth/login` | Login and get JWT token | No |
+| POST | `/api/v1/auth/logout` | Logout user | Yes |
+| GET | `/api/v1/auth/me` | Get current user info | Yes |
+| GET | `/api/v1/auth/users/details` | Get detailed user info | Yes |
 
-#### Books
+### Book Management
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/v1/books` | Create new book with AI summary | Yes |
+| GET | `/api/v1/books` | Get all books with filters | No |
+| GET | `/api/v1/books/my-books` | Get books created by current user | Yes |
+| GET | `/api/v1/books/{book_id}` | Get specific book | No |
+| PUT | `/api/v1/books/{book_id}` | Update book | Yes |
+| DELETE | `/api/v1/books/{book_id}` | Delete book | Yes |
+| GET | `/api/v1/books/{book_id}/details` | Get book with reviews | No |
+| POST | `/api/v1/books/{book_id}/generate-summary` | Generate AI summary | Yes |
+| POST | `/api/v1/books/{book_id}/regenerate-summary` | Regenerate AI summary | Yes |
+| POST | `/api/v1/books/{book_id}/reindex` | Reindex for search | Yes |
+| GET | `/api/v1/books/{book_id}/summary-info` | Get summary info | No |
+| GET | `/api/v1/books/stats/count` | Get total books count | No |
 
-* `POST /books` – Create book
-* `GET /books` – List books
-* `GET /books/{id}` – Book details
-* `PUT /books/{id}` – Update book
-* `DELETE /books/{id}` – Delete book
-* `POST /books/{id}/generate-summary` – AI summary
-* `POST /books/{id}/reindex` – Rebuild search index
+### Review Management
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/v1/reviews` | Create review | Yes |
+| POST | `/api/v1/books/{book_id}/reviews` | Add review to book | Yes |
+| GET | `/api/v1/reviews/book/{book_id}` | Get book reviews | No |
+| GET | `/api/v1/reviews/my-reviews` | Get user's reviews | Yes |
+| GET | `/api/v1/reviews/{review_id}` | Get specific review | No |
+| PUT | `/api/v1/reviews/{review_id}` | Update review | Yes |
+| DELETE | `/api/v1/reviews/{review_id}` | Delete review | Yes |
+| GET | `/api/v1/reviews/book/{book_id}/summary` | Get review statistics | No |
+| GET | `/api/v1/books/{book_id}/summary` | AI summary of reviews | No |
 
-#### Reviews
+### Search & Indexing
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/v1/search` | Semantic search | No |
+| POST | `/api/v1/search` | Advanced search | No |
+| POST | `/api/v1/reindex-all` | Reindex all data | Yes |
 
-* `POST /books/{id}/reviews` – Add review
-* `GET /books/{id}/reviews` – List reviews
-* `GET /books/{id}/summary` – AI summary of reviews
+### AI Summarization
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/v1/summaries/book/{book_id}/summary` | AI review analysis | No |
+| GET | `/api/v1/summaries/book/{book_id}/summary/quick` | Quick cached summary | No |
+| POST | `/api/v1/summaries/book/{book_id}/summary/refresh` | Refresh AI analysis | No |
+| GET | `/api/v1/summaries/book/{book_id}/summary/status` | Check summary status | No |
+| GET | `/api/v1/summaries/batch` | Get multiple summaries | No |
 
-#### Search & Indexing
+### Document Management
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/v1/documents/upload` | Upload document (PDF/TXT) | Yes |
+| GET | `/api/v1/documents/` | Get all documents | Yes |
+| GET | `/api/v1/documents/my-documents` | Get user's documents | Yes |
+| GET | `/api/v1/documents/{document_id}` | Get specific document | Yes |
+| DELETE | `/api/v1/documents/{document_id}` | Delete document | Yes |
+| GET | `/api/v1/documents/{document_id}/download` | Download document | Yes |
 
-* `GET /search` – Semantic search
-* `POST /search` – Search via request body
-* `POST /reindex-all` – Reindex all data
+### Ingestion Pipeline
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/v1/ingestion/documents/{document_id}/ingest` | Start ingestion | Yes |
+| GET | `/api/v1/ingestion/documents/{document_id}/ingestion-status` | Check status | Yes |
+| GET | `/api/v1/ingestion/ingestion-jobs` | Get all jobs | Yes |
 
-#### Admin (Restricted)
+### Q&A System
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/v1/qa/ask/{document_id}` | Ask document question | Yes |
+| DELETE | `/api/v1/qa/document/{document_id}/rag` | Remove from RAG | Yes |
+| GET | `/api/v1/rag/status` | Get RAG status | No |
+| GET | `/api/v1/rag/documents` | Get RAG documents | No |
 
-* `POST /admin/users` – Create user
-* `GET /admin/users` – List users
-* `PUT /admin/users/{id}` – Update user
-* `DELETE /admin/users/{id}` – Delete user
-* `GET /admin/users/roles` – List roles
-* `POST /admin/users/roles` – Create role
+### Recommendations
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/v1/recommendations/` | Personalized recommendations | Yes |
+| GET | `/api/v1/recommendations/popular` | Popular books | Yes |
+| GET | `/api/v1/recommendations/new` | New releases | Yes |
+| POST | `/api/v1/recommendations/clear-cache` | Clear cache | Yes |
+| GET | `/api/v1/recommendations/stats` | Get stats | Yes |
 
-#### Documents
+### Admin Operations
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| POST | `/api/v1/admin/users` | Create user | Yes (Admin) |
+| GET | `/api/v1/admin/users` | Get all users | Yes (Admin) |
+| PUT | `/api/v1/admin/users/{user_id}` | Update user | Yes (Admin) |
+| DELETE | `/api/v1/admin/users/{user_id}` | Delete user | Yes (Admin) |
+| GET | `/api/v1/admin/users/roles` | List roles | Yes (Admin) |
+| POST | `/api/v1/admin/users/roles` | Create role | Yes (Admin) |
+| PUT | `/api/v1/admin/users/{user_id}/roles` | Update roles | Yes (Admin) |
+| PUT | `/api/v1/admin/users/{user_id}/toggle-active` | Toggle active status | Yes (Admin) |
 
-* `POST /documents/upload` – Upload document
-* `GET /documents` – List documents
-* `GET /documents/{id}/download` – Download document
-* `DELETE /documents/{id}` – Delete document
+### System Health
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/` | Root endpoint | No |
+| GET | `/health` | Health check | No |
+| GET | `/ping` | Ping | No |
+| GET | `/api/info` | API info | No |
 
----
+## Authentication
+**Token Format:** `Bearer <jwt_token>`
+
+**Base URL:** `http://localhost:8000`
 
 ## Project Setup
 
@@ -157,6 +219,14 @@ docker-compose build frontend
 * Docker Desktop
 * PostgreSQL (handled by Docker)
 * OpenRouter API Key
+
+---
+
+## Folder Structure
+
+### Backend & Frontend Folder Structure
+![folder-structure](screenshots/folder-structure.png)
+
 
 ---
 
