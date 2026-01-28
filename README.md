@@ -465,10 +465,10 @@ docker-compose down
 
 ---
 
-## Verification & Admin Access
+## Admin Access
 
-### All Tests Passed
-![Test Results](screenshots/tests-passed.png)
+<!-- ### All Tests Passed
+![Test Results](screenshots/tests-passed.png) -->
 
 ### Default Admin Login
 ![Admin Credentials](screenshots/admin-credentials.png)
