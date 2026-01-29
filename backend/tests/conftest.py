@@ -74,13 +74,13 @@ def setup_test_database():
     """
     print("📦 Creating database tables...")
     Base.metadata.create_all(bind=test_engine)
-    print("✅ Tables created successfully")
+    print("Tables created successfully")
     
     yield
     
     print("\n🧹 Cleaning up...")
     Base.metadata.drop_all(bind=test_engine)
-    print("✅ Cleanup completed")
+    print("Cleanup completed")
 
 
 @pytest.fixture
@@ -169,9 +169,16 @@ def test_user(db_session: Session, test_user_data: Dict, setup_roles) -> User:
 @pytest.fixture
 def auth_token(db_session: Session, test_user: User) -> str:
     """Create and return a valid auth token for test user"""
-    # Create token
+    # First, clean up any existing tokens for this user
+    db_session.query(AuthToken).filter(AuthToken.user_id == test_user.id).delete()
+    db_session.commit()
+    
+    # Create token with unique data
     access_token = security_module.create_access_token(
-        data={"sub": test_user.username, "user_id": test_user.id}
+        data={
+            "sub": test_user.username, 
+            "user_id": test_user.id
+        }
     )
     
     # Save to database
@@ -269,18 +276,20 @@ def admin_headers(admin_token: str) -> Dict[str, str]:
     """Return headers with admin authorization token"""
     return {"Authorization": f"Bearer {admin_token}"}
 
-# tests/conftest.py - Add this function
 
 @pytest.fixture
 def clean_token(db_session: Session, test_user: User) -> str:
     """Create a clean token without duplicates"""
-    # Remove any existing tokens for this user
+    # Force cleanup before creating token
     db_session.query(AuthToken).filter(AuthToken.user_id == test_user.id).delete()
     db_session.commit()
     
-    # Create new token
+    # Create new token - security.py will add unique jti and rnd
     access_token = security_module.create_access_token(
-        data={"sub": test_user.username, "user_id": test_user.id}
+        data={
+            "sub": test_user.username, 
+            "user_id": test_user.id
+        }
     )
     
     # Save to database
@@ -313,7 +322,7 @@ def extreme_cleanup(db_session: Session):
     
     # Clean EVERYTHING after each test
     try:
-        # Delete all auth tokens
+        # Delete all auth tokens FIRST
         db_session.query(AuthToken).delete()
         
         # Delete all users (except maybe default roles)

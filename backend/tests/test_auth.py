@@ -9,6 +9,7 @@ from fastapi import status
 import uuid
 
 
+
 class TestAuthProduction:
     """Production level authentication tests"""
     
@@ -86,7 +87,7 @@ class TestAuthProduction:
             assert response.status_code != status.HTTP_500_INTERNAL_SERVER_ERROR, \
                 f"Server error for {description}"
             
-            print(f"✅ {description}: {response.status_code}")
+            print(f"{description}: {response.status_code}")
     
     def test_signup_password_validation(self, client):
         """Test password validation"""
@@ -176,38 +177,38 @@ class TestAuthProduction:
     # ==================== PROTECTED ENDPOINTS ====================
     
 
-def test_get_current_user_with_valid_token(self, client, headers, test_user):
-    """Test accessing /me with valid token"""
-    response = client.get("/api/v1/auth/me", headers=headers)
-    
-    print(f"/me Response Status: {response.status_code}")
-    print(f"/me Response Body: {response.json() if response.status_code == 200 else 'No body for error'}")
-    
-    # Status code check - flexible
-    assert response.status_code in [status.HTTP_200_OK, status.HTTP_401_UNAUTHORIZED]
-    
-    if response.status_code == status.HTTP_200_OK:
-        data = response.json()
+    def test_get_current_user_with_valid_token(self, client, headers, test_user):
+        """Test accessing /me with valid token"""
+        response = client.get("/api/v1/auth/me", headers=headers)
         
-        # Your /me endpoint returns current_user directly
-        # Let's check what it actually returns
-        print(f"Actual response keys: {list(data.keys())}")
+        print(f"/me Response Status: {response.status_code}")
+        print(f"/me Response Body: {response.json() if response.status_code == 200 else 'No body for error'}")
         
-        # Basic checks - don't validate full schema
-        assert "username" in data
-        assert data["username"] == test_user.username
+        # Status code check - flexible
+        assert response.status_code in [status.HTTP_200_OK, status.HTTP_401_UNAUTHORIZED]
         
-        # Optional: Check for common fields
-        if "id" in data:
-            assert isinstance(data["id"], int)
-        
-        if "is_active" in data:
-            assert isinstance(data["is_active"], bool)
-        
-        if "created_at" in data:
-            assert isinstance(data["created_at"], str)  # ISO format string
-        
-        print("✅ /me endpoint working with valid token")
+        if response.status_code == status.HTTP_200_OK:
+            data = response.json()
+            
+            # Your /me endpoint returns current_user directly
+            # Let's check what it actually returns
+            print(f"Actual response keys: {list(data.keys())}")
+            
+            # Basic checks - don't validate full schema
+            assert "username" in data
+            assert data["username"] == test_user.username
+            
+            # Optional: Check for common fields
+            if "id" in data:
+                assert isinstance(data["id"], int)
+            
+            if "is_active" in data:
+                assert isinstance(data["is_active"], bool)
+            
+            if "created_at" in data:
+                assert isinstance(data["created_at"], str)  # ISO format string
+            
+            print("/me endpoint working with valid token")
     
     def test_get_current_user_without_token(self, client):
         """Test accessing /me without token"""
@@ -313,7 +314,7 @@ def test_get_current_user_with_valid_token(self, client, headers, test_user):
             print(f"  /me after logout: {me_after_response.status_code}")
             # Might be 401
         
-        print(f"✅ Complete flow tested for {unique_user}")
+        print(f"Complete flow tested for {unique_user}")
     
     # ==================== ERROR HANDLING ====================
     
@@ -338,7 +339,7 @@ def test_get_current_user_with_valid_token(self, client, headers, test_user):
             error_data = response.json()
             # Check error structure
             assert "error" in error_data or "detail" in error_data
-            print(f"✅ Error response format: {response.status_code}")
+            print(f"Error response format: {response.status_code}")
     
     def test_rate_limiting_not_crashing(self, client):
         """Test that multiple rapid requests don't crash"""
@@ -381,7 +382,7 @@ def test_get_current_user_with_valid_token(self, client, headers, test_user):
         login_data = login_response.json()
         assert "password" not in str(login_data).lower()
         
-        print("✅ Password security check passed")
+        print("Password security check passed")
     
     def test_token_has_expected_structure(self, client):
         """Test that JWT tokens have expected structure"""
@@ -400,7 +401,7 @@ def test_get_current_user_with_valid_token(self, client, headers, test_user):
             parts = token.split('.')
             assert len(parts) == 3, "JWT token should have 3 parts"
             
-            print(f"✅ Token structure valid: {len(parts)} parts")
+            print(f"Token structure valid: {len(parts)} parts")
 
 
 # Run comprehensive tests

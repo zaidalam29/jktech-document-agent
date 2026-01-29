@@ -25,7 +25,7 @@ def init_db():
             Base.metadata.create_all(bind=engine)
             logger.info("Database tables created successfully!")
         except Exception as e:
-            logger.error(f"❌ Error creating tables: {str(e)}")
+            logger.error(f"Error creating tables: {str(e)}")
             raise
         
         # Step 2: Verify tables were created
@@ -106,14 +106,14 @@ def init_db():
             logger.info("=" * 60)
             
         except Exception as e:
-            logger.error(f"❌ Error during data initialization: {str(e)}")
+            logger.error(f"Error during data initialization: {str(e)}")
             db.rollback()
             raise
         finally:
             db.close()
             
     except Exception as e:
-        logger.error(f"❌ Failed to initialize database: {str(e)}")
+        logger.error(f"Failed to initialize database: {str(e)}")
         import traceback
         logger.error(traceback.format_exc())
         raise

@@ -18,9 +18,38 @@ def get_password_hash(password: str) -> str:
     """Hash a password"""
     return pwd_context.hash(password)
 
+# def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
+#     """Create JWT access token"""
+#     to_encode = data.copy()
+    
+#     if expires_delta:
+#         expire = datetime.utcnow() + expires_delta
+#     else:
+#         expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    
+#     to_encode.update({"exp": expire})
+#     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    
+#     return encoded_jwt
+
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    """Create JWT access token"""
+    """Create JWT access token with uniqueness guarantee"""
+    import secrets
+    from uuid import uuid4
+    
     to_encode = data.copy()
+    
+    # Add unique JWT ID to ensure uniqueness
+    if "jti" not in to_encode:
+        to_encode["jti"] = str(uuid4())
+    
+    # Add issued at timestamp
+    if "iat" not in to_encode:
+        to_encode["iat"] = datetime.utcnow()
+    
+    # Add random value for additional uniqueness
+    if "rnd" not in to_encode:
+        to_encode["rnd"] = secrets.token_hex(8)
     
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -28,6 +57,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
         expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     
     to_encode.update({"exp": expire})
+    
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     
     return encoded_jwt
