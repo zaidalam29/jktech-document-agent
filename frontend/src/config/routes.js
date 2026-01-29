@@ -18,7 +18,6 @@ const ROUTES = {
     ADMIN: {
       USERS: '/admin/users',
       SETTINGS: '/admin/settings',
-      ANALYTICS: '/admin/analytics',
     },
     PROFILE: '/profile',
     BOOKS: {
@@ -29,6 +28,7 @@ const ROUTES = {
       EDIT: '/books/:id/edit',
       REVIEWS: '/books/:id/reviews',
     },
+    RECOMMENDATIONS: '/recommendations',
   },
   ERROR: {
     404: '/404',

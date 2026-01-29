@@ -42,7 +42,7 @@ class AuthService {
         data = await response.text();
       }
 
-      // ✅ UPDATED: Handle error responses with new format
+      // UPDATED: Handle error responses with new format
       if (!response.ok) {
         logger.error('API Error Response:', {
           endpoint,
@@ -51,7 +51,7 @@ class AuthService {
           data,
         });
 
-        // ✅ EXTRACT ERROR MESSAGE FROM NEW FORMAT
+        // EXTRACT ERROR MESSAGE FROM NEW FORMAT
         let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
 
         // Check for new error format: data.error.message
@@ -136,7 +136,7 @@ class AuthService {
           user: data.user
         });
 
-        console.log('✅ Login - Auth data stored:', {
+        console.log('Login - Auth data stored:', {
           tokenStored: !!getToken(),
           userStored: !!localStorage.getItem('user'),
           user: data.user.username
@@ -160,12 +160,12 @@ class AuthService {
       throw new Error('Invalid response from server');
 
     } catch (error) {
-      console.error('❌ Login failed:', {
+      console.error('Login failed:', {
         username,
         error: error.message
       });
 
-      // ✅ SPECIFIC ERROR HANDLING FOR NEW API FORMAT
+      // SPECIFIC ERROR HANDLING FOR NEW API FORMAT
       const errorMsg = error.message.toLowerCase();
 
       if (errorMsg.includes('incorrect username or password') ||
@@ -244,7 +244,7 @@ class AuthService {
           user: data.user
         });
 
-        console.log('✅ Registration complete. Data stored:', {
+        console.log('Registration complete. Data stored:', {
           hasToken: !!getToken(),
           user: data.user.username,
           userId: data.user.id
@@ -264,12 +264,12 @@ class AuthService {
       throw new Error('Registration response incomplete');
 
     } catch (error) {
-      console.error('❌ Registration failed:', {
+      console.error('Registration failed:', {
         username,
         error: error.message
       });
 
-      // ✅ SPECIFIC ERROR HANDLING FOR NEW API FORMAT
+      // SPECIFIC ERROR HANDLING FOR NEW API FORMAT
       const errorMsg = error.message.toLowerCase();
 
       if (errorMsg.includes('username already registered') ||
@@ -330,7 +330,7 @@ class AuthService {
 
       console.log('🔍 User details API response:', data);
 
-      // ✅ Check if API returned success: false (unauthorized case)
+      // Check if API returned success: false (unauthorized case)
       if (data?.success === false) {
         console.log('⚠️ getUserDetails returned success: false');
 
@@ -344,15 +344,15 @@ class AuthService {
         throw new Error(data?.error?.message || 'Failed to get user details');
       }
 
-      // ✅ Success case - user data received
+      // Success case - user data received
       if (data?.username) {
-        console.log('✅ User details fetched:', {
+        console.log('User details fetched:', {
           username: data.username,
           id: data.id,
           roles: data.roles
         });
 
-        // ✅ Transform the data to match expected format
+        // Transform the data to match expected format
         const userData = {
           username: data.username,
           id: data.id,
@@ -363,7 +363,7 @@ class AuthService {
 
         // Update localStorage
         localStorage.setItem('user', JSON.stringify(userData));
-        console.log('✅ User data stored in localStorage');
+        console.log('User data stored in localStorage');
 
         return userData;
       }
@@ -373,7 +373,7 @@ class AuthService {
       throw new Error('Invalid user data received');
 
     } catch (error) {
-      console.error('❌ getUserDetails error:', error.message);
+      console.error('getUserDetails error:', error.message);
 
       // Handle unauthorized errors
       if (error.message.includes('Not authenticated') ||
@@ -457,7 +457,7 @@ class AuthService {
     } finally {
       // Always clear auth data from localStorage
       clearAuthData();
-      console.log('✅ Auth data cleared from localStorage');
+      console.log('Auth data cleared from localStorage');
     }
   }
 
@@ -488,14 +488,14 @@ class AuthService {
           return false;
         }
       } catch (parseError) {
-        console.error('❌ Token parse error:', parseError);
+        console.error('Token parse error:', parseError);
         return false;
       }
 
       return true;
 
     } catch (error) {
-      console.error('❌ Session validation failed:', error);
+      console.error('Session validation failed:', error);
       clearAuthData();
       return false;
     }
@@ -517,7 +517,7 @@ class AuthService {
 
       return user;
     } catch (error) {
-      console.error('❌ Error getting current user:', error);
+      console.error('Error getting current user:', error);
       return null;
     }
   }

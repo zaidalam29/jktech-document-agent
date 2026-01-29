@@ -1,6 +1,6 @@
 // src/components/books/BookGrid.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // ✅ useNavigate import करें
+import { useNavigate } from 'react-router-dom'; // useNavigate import करें
 import BookCard from '../../pages/books/BookCard';
 import Loader from '../common/Loader';
 import Button from '../common/Button';
@@ -12,7 +12,7 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
-  Plus, // ✅ Plus icon import करें
+  Plus, // Plus icon import करें
   BookOpen
 } from 'lucide-react';
 
@@ -23,7 +23,7 @@ const BookGrid = ({
   emptyMessage = "No books found.",
   itemsPerPage = 12
 }) => {
-  const navigate = useNavigate(); // ✅ useNavigate hook
+  const navigate = useNavigate(); // useNavigate hook
   const [viewMode, setViewMode] = useState('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,7 +69,7 @@ const BookGrid = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // ✅ Navigate to create book page
+  // Navigate to create book page
   const handleCreateBook = () => {
     navigate('/books/create');
   };
@@ -90,7 +90,7 @@ const BookGrid = ({
           <h3>{emptyMessage}</h3>
           <p>Start by adding your first book to the library.</p>
           
-          {/* ✅ Create Book Button in Empty State */}
+          {/* Create Book Button in Empty State */}
           <Button
             variant="primary"
             onClick={handleCreateBook}
@@ -106,7 +106,7 @@ const BookGrid = ({
 
   return (
     <div className="book-grid-container">
-      {/* ✅ Header with Create Button */}
+      {/* Header with Create Button */}
       <div className="book-grid-header">
         <div className="header-left">
           <h2>Book Library</h2>

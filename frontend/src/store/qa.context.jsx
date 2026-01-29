@@ -39,7 +39,7 @@ export const QAProvider = ({ children }) => {
       console.log('🔄 Fetching ingested documents for Q&A...');
 
       const data = await qaService.getIngestedDocuments(params);
-      console.log('✅ Ingested documents fetched:', data.length);
+      console.log('Ingested documents fetched:', data.length);
 
       setDocuments(data);
 
@@ -65,7 +65,7 @@ export const QAProvider = ({ children }) => {
       console.log(`📄 Fetching details for document ${documentId}`);
 
       const data = await qaService.getDocumentDetails(documentId);
-      console.log('✅ Document details:', data);
+      console.log('Document details:', data);
 
       setSelectedDocument(data);
 
@@ -92,7 +92,7 @@ export const QAProvider = ({ children }) => {
     console.log(`❓ Asking question for document ${documentId}:`, question);
 
     const data = await qaService.askDocumentQuestion(documentId, question);
-    console.log('✅ Answer received:', data);
+    console.log('Answer received:', data);
 
     // Check if answer is actually in the response
     if (!data.answer && !data.content) {

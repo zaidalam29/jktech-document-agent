@@ -4,7 +4,7 @@
   margin: 0 auto;
   width: 100%;
   position: relative;
-  z-index: 1; /* ✅ Dashboard content ko aage lao */
+  z-index: 1; /* Dashboard content ko aage lao */
 }
 
 .dashboard-header {

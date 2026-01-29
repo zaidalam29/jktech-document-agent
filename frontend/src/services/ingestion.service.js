@@ -73,11 +73,11 @@ class IngestionService {
         throw error;
       }
 
-      logger.debug('✅ Ingestion API Success:', { endpoint, status: response.status });
+      logger.debug('Ingestion API Success:', { endpoint, status: response.status });
       return data;
 
     } catch (error) {
-      logger.error('❌ Ingestion API Fetch Error:', {
+      logger.error('Ingestion API Fetch Error:', {
         endpoint,
         error: error.message,
         status: error.status
@@ -110,7 +110,7 @@ class IngestionService {
         method: 'POST',
       });
 
-      console.log('✅ Ingestion started:', data);
+      console.log('Ingestion started:', data);
 
       if (data?.success === false) {
         throw new Error(data?.error?.message || 'Failed to start ingestion');

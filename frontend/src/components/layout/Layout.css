@@ -42,7 +42,7 @@
   overflow-y: auto;
   min-height: calc(100vh - 64px);
   position: relative;
-  z-index: 1; /* ✅ Dashboard content ko aage lao */
+  z-index: 1; /* Dashboard content ko aage lao */
 }
 
 /* Sidebar States */
@@ -62,7 +62,7 @@
   top: 64px;
   left: 0;
   bottom: 0;
-  z-index: 2; /* ✅ Sidebar ka z-index thoda kam karo */
+  z-index: 2; /* Sidebar ka z-index thoda kam karo */
   background: white;
   border-right: 1px solid #e0e0e0;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);

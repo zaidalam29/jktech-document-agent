@@ -84,8 +84,8 @@ const Register = () => {
       alerts.close();
 
       if (result.success) {
-        // ✅ Check for both result.user and result.success
-        console.log('✅ Registration result:', result);
+        // Check for both result.user and result.success
+        console.log('Registration result:', result);
 
         // Show success alert
         await alerts.success(
@@ -98,7 +98,7 @@ const Register = () => {
           message: 'Welcome to Document QA!',
         });
 
-        // ✅ Directly navigate to dashboard (result.user might be undefined)
+        // Directly navigate to dashboard (result.user might be undefined)
         // Because we store user in localStorage anyway
         navigate('/dashboard', { replace: true });
 

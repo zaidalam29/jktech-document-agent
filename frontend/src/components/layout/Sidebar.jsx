@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../store/auth.context';
 import { useApp } from '../../store/app.context';
+import { Sparkles } from 'lucide-react';
 import { 
   Home, 
   FileText, 
@@ -50,6 +51,12 @@ const Sidebar = () => {
       label: 'Ask Question',
       icon: <MessageSquare size={20} />,
       roles: ['user', 'admin', 'viewer'],
+    },
+    {
+        path: '/recommendations', 
+        label: 'Recommendations', 
+        icon: <Sparkles size={20} />, 
+        roles: ['user', 'admin', 'viewer'],
     },
  
   ];

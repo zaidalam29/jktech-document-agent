@@ -37,7 +37,7 @@ export const IngestionProvider = ({ children }) => {
       console.log('🔄 Fetching all ingestion jobs...');
 
       const data = await ingestionService.getAllIngestionJobs(params);
-      console.log('✅ Ingestion jobs fetched:', data);
+      console.log('Ingestion jobs fetched:', data);
       setIngestionJobs(data);
 
       // Update stats
@@ -105,7 +105,7 @@ export const IngestionProvider = ({ children }) => {
 
       const result = await ingestionService.startIngestionWithProgress(documentId, onProgress);
       
-      console.log('✅ Ingestion completed:', result);
+      console.log('Ingestion completed:', result);
 
       // Remove from active ingestions
       setActiveIngestions(prev => {
@@ -169,7 +169,7 @@ export const IngestionProvider = ({ children }) => {
 
       const results = await ingestionService.batchIngestDocuments(documentIds, onProgress);
       
-      console.log('✅ Batch ingestion completed:', results);
+      console.log('Batch ingestion completed:', results);
 
       // Remove all from active ingestions
       setActiveIngestions(prev => {

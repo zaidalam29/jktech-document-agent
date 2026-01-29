@@ -36,7 +36,7 @@ export const DocumentProvider = ({ children }) => {
       console.log('🔄 Fetching all documents...');
 
       const data = await documentService.getAllDocuments(params);
-      console.log('✅ Documents fetched:', data);
+      console.log('Documents fetched:', data);
       setDocuments(data);
 
       return data;
@@ -61,7 +61,7 @@ export const DocumentProvider = ({ children }) => {
       console.log('🔄 Fetching my documents...');
 
       const data = await documentService.getMyDocuments(params);
-      console.log('✅ My documents fetched:', data);
+      console.log('My documents fetched:', data);
       setMyDocuments(data);
 
       return data;
@@ -86,7 +86,7 @@ export const DocumentProvider = ({ children }) => {
       console.log(`🔄 Fetching document details for ID: ${documentId}`);
 
       const data = await documentService.getDocument(documentId);
-      console.log('✅ Document details:', data);
+      console.log('Document details:', data);
       setSelectedDocument(data);
 
       return data;
@@ -126,7 +126,7 @@ export const DocumentProvider = ({ children }) => {
       
       clearInterval(progressInterval);
       setUploadProgress(100);
-      console.log('✅ Upload complete:', data);
+      console.log('Upload complete:', data);
 
       // Refresh documents list
       await fetchAllDocuments();
@@ -157,7 +157,7 @@ export const DocumentProvider = ({ children }) => {
       console.log(`🗑️ Deleting document ID: ${documentId}`);
       
       const result = await documentService.deleteDocument(documentId);
-      console.log('✅ Delete result:', result);
+      console.log('Delete result:', result);
 
       // Remove from local state
       setDocuments(prev => prev.filter(doc => doc.id !== parseInt(documentId)));

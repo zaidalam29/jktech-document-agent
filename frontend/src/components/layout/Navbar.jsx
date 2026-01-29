@@ -122,4 +122,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; // ✅ Add this line
+export default Navbar; // Add this line

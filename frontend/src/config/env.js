@@ -12,7 +12,7 @@ const API_BASE = getEnv('VITE_API_URL', 'http://localhost:8000/api/v1');
 const IS_DEVELOPMENT = getEnv('VITE_ENV', 'development') === 'development';
 
 const env = {
-  // ✅ Complete API URLs
+  // Complete API URLs
   API_URL: API_BASE,
   AUTH: {
     LOGIN: `${API_BASE}/auth/login`,

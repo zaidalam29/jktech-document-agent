@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       // We have token and user, set authenticated state
-      console.log('✅ Setting authenticated state from localStorage');
+      console.log('Setting authenticated state from localStorage');
       setUser(parsedUser);
       setIsAuthenticated(true);
       setLoading(false);
@@ -128,7 +128,7 @@ export const AuthProvider = ({ children }) => {
       console.log('🔍 Registration result in context:', result);
 
       if (result.success) {
-        console.log('✅ Registration successful, updating context...');
+        console.log('Registration successful, updating context...');
 
         // Get user from localStorage (authService.register में store किया गया)
         const token = getToken();

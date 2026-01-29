@@ -38,7 +38,7 @@ function QAPage() {
 
   // Get all contexts
   const {
-    documents: ingestedDocuments, // Ingested documents from QA context
+    documents: ingestedDocuments, 
     selectedDocument,
     loading: qaLoading,
     asking,
@@ -232,7 +232,7 @@ function QAPage() {
     try {
       const documentId = selectedDocument.id;
 
-      // ✅ Temporary: Use regular askQuestion instead of streamQuestion
+      // Temporary: Use regular askQuestion instead of streamQuestion
       await askQuestion(documentId, question);
       setQuestion('');
     } catch (error) {
@@ -292,7 +292,7 @@ function QAPage() {
         <div className="qa-header">
           <h1 className="qa-title">
             <Brain size={32} className="mr-3" />
-            Document Q&A
+            Document Q&A (RAG)
           </h1>
           <p className="qa-subtitle">
             Ask questions to your ingested documents and get AI-powered answers

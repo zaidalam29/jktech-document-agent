@@ -40,7 +40,7 @@ const Layout = () => {
       <div className="layout-content">
         <Sidebar />
         
-        {/* ✅ Fixed: Use dynamic class for sidebar state */}
+        {/* Fixed: Use dynamic class for sidebar state */}
         <main className={`main-content ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
           <Outlet />
         </main>

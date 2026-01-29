@@ -92,11 +92,11 @@ class DocumentService {
         throw error;
       }
 
-      logger.debug('✅ Document API Success:', { endpoint, status: response.status });
+      logger.debug('Document API Success:', { endpoint, status: response.status });
       return data;
 
     } catch (error) {
-      logger.error('❌ Document API Fetch Error:', {
+      logger.error('Document API Fetch Error:', {
         endpoint,
         error: error.message,
         status: error.status
@@ -248,7 +248,7 @@ class DocumentService {
         body: formData,
       });
 
-      console.log('✅ Upload successful:', data);
+      console.log('Upload successful:', data);
 
       if (data?.success === false) {
         throw new Error(data?.error?.message || 'Failed to upload document');
@@ -271,7 +271,7 @@ class DocumentService {
         method: 'DELETE'
       });
 
-      console.log('✅ Delete response:', data);
+      console.log('Delete response:', data);
 
       if (data?.success === false) {
         throw new Error(data?.error?.message || 'Failed to delete document');

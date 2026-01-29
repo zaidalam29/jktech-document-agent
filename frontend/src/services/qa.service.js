@@ -64,11 +64,11 @@ class QAService {
         throw error;
       }
 
-      logger.debug('✅ QA API Success:', { endpoint, status: response.status });
+      logger.debug('QA API Success:', { endpoint, status: response.status });
       return data;
 
     } catch (error) {
-      logger.error('❌ QA API Fetch Error:', {
+      logger.error('QA API Fetch Error:', {
         endpoint,
         error: error.message,
         status: error.status
@@ -107,7 +107,7 @@ class QAService {
         body: { question }
       });
 
-      console.log('✅ Question response:', data);
+      console.log('Question response:', data);
 
       // Check if document has chunks
       if (data.source_document) {
@@ -122,7 +122,7 @@ class QAService {
 
       return data;
     } catch (error) {
-      console.error('❌ Error asking question:', error);
+      console.error('Error asking question:', error);
       throw error;
     }
   }
@@ -134,7 +134,7 @@ class QAService {
     try {
       console.log(`🌊 Streaming answer for document ${documentId}`);
 
-      const response = await fetch(`${API_BASE}/qa/ask/${documentId}`, { // ✅ Correct endpoint
+      const response = await fetch(`${API_BASE}/qa/ask/${documentId}`, { // Correct endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ class QAService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ Stream response error:', response.status, errorText);
+        console.error('Stream response error:', response.status, errorText);
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
@@ -158,7 +158,7 @@ class QAService {
       while (true) {
         const { done, value } = await reader.read();
         if (done) {
-          console.log('✅ Stream complete');
+          console.log('Stream complete');
           break;
         }
 
@@ -213,7 +213,7 @@ class QAService {
               }
               
             } catch (e) {
-              console.log('❌ JSON parse failed for:', data);
+              console.log('JSON parse failed for:', data);
               console.log('Error:', e.message);
               
               // If not JSON, try as plain text
@@ -242,7 +242,7 @@ class QAService {
         }
       }
 
-      console.log('✅ Final answer:', fullAnswer);
+      console.log('Final answer:', fullAnswer);
       console.log('📊 Total chunks:', chunkCount);
       
       return fullAnswer;
@@ -263,7 +263,7 @@ class QAService {
         method: 'DELETE'
       });
 
-      console.log('✅ Document removed from RAG:', data);
+      console.log('Document removed from RAG:', data);
 
       if (data?.success === false) {
         throw new Error(data?.error?.message || 'Failed to remove document from RAG');
@@ -296,7 +296,7 @@ class QAService {
       // Filter only completed ingestion jobs
       const ingestedDocs = data.filter(job => job.status === 'completed');
 
-      console.log('✅ Ingested documents:', ingestedDocs.length);
+      console.log('Ingested documents:', ingestedDocs.length);
 
       return ingestedDocs;
     } catch (error) {

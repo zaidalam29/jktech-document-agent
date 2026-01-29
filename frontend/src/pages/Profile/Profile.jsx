@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../store/app.context';
 import Button from '../../components/common/Button';
 import Loader from '../../components/common/Loader';
-import authService from '../../services/auth.service'; // ✅ DIRECT IMPORT
+import authService from '../../services/auth.service'; // DIRECT IMPORT
 import './Profile.css';
 
 const Profile = () => {
@@ -20,18 +20,18 @@ const Profile = () => {
         
         console.log('🔍 Fetching profile data...');
         
-        // ✅ DIRECT CALL TO authService.getUserDetails
+        // DIRECT CALL TO authService.getUserDetails
         const details = await authService.getUserDetails();
         
         if (!details) {
           throw new Error('No user data received');
         }
         
-        console.log('✅ Profile data loaded:', details);
+        console.log('Profile data loaded:', details);
         setUserDetails(details);
         
       } catch (error) {
-        console.error('❌ Error loading profile:', error);
+        console.error('Error loading profile:', error);
         setError(error.message);
         addNotification({
           type: 'error',
