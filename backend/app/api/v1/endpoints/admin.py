@@ -1,4 +1,4 @@
-# app/api/v1/endpoints/admin.py में
+# app/api/v1/endpoints/admin.py
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session, joinedload
 from app.core.database import get_db

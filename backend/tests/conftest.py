@@ -334,3 +334,328 @@ def extreme_cleanup(db_session: Session):
     except Exception as e:
         db_session.rollback()
         logger.debug(f"Cleanup warning: {e}")
+        
+@pytest.fixture
+def role_crud():
+    """Provide role CRUD instance"""
+    from app.crud.user import role_crud
+    return role_crud
+
+
+@pytest.fixture
+def user_crud():
+    """Provide user CRUD instance"""
+    from app.crud.user import user_crud
+    return user_crud        
+
+@pytest.fixture
+def review_crud():
+    """Provide review CRUD instance"""
+    from app.crud.review import review_crud
+    return review_crud
+
+
+from io import BytesIO
+from fastapi import UploadFile
+from pathlib import Path
+from unittest.mock import MagicMock
+
+@pytest.fixture
+def mock_upload_file():
+    """Create a mock upload file for testing"""
+    # Create a mock text file
+    file_content = b"This is a test document content for testing."
+    file_like = BytesIO(file_content)
+    
+    # Create a mock UploadFile
+    upload_file = MagicMock(spec=UploadFile)
+    upload_file.filename = "test_document.txt"
+    upload_file.content_type = "text/plain"
+    upload_file.size = len(file_content)
+    upload_file.file = file_like
+    upload_file.read.return_value = file_content
+    
+    return upload_file
+
+@pytest.fixture
+def sample_text_file(tmp_path):
+    """Create a sample text file on disk"""
+    test_dir = tmp_path / "test_documents"
+    test_dir.mkdir()
+    
+    file_path = test_dir / "sample.txt"
+    file_path.write_text("This is a sample text file for testing.")
+    
+    return file_path
+
+@pytest.fixture
+def test_document(db_session, test_user):
+    """Create a test document in database"""
+    from app.models.document import Document, DocumentStatus
+    
+    # Check if document already exists
+    existing_doc = db_session.query(Document).filter(
+        Document.filename == "test_document.txt"
+    ).first()
+    
+    if existing_doc:
+        return existing_doc
+    
+    document = Document(
+        filename="test_document_123.txt",
+        original_filename="test_document.txt",
+        file_size=1024,
+        file_type="text",
+        local_path="/tmp/test_document_123.txt",  # Mock path
+        uploaded_by=test_user.id,
+        user_id=test_user.id,
+        status=DocumentStatus.UPLOADED,
+        is_public=True,
+        description="Test document for unit testing",
+        tags="test,document,unit-test",
+        content="This is test document content for unit testing."
+    )
+    
+    db_session.add(document)
+    db_session.commit()
+    db_session.refresh(document)
+    
+    return document
+
+@pytest.fixture
+def private_document(db_session, test_user):
+    """Create a private test document"""
+    from app.models.document import Document, DocumentStatus
+    
+    document = Document(
+        filename="private_document_456.txt",
+        original_filename="private_document.txt",
+        file_size=512,
+        file_type="text",
+        local_path="/tmp/private_document_456.txt",
+        uploaded_by=test_user.id,
+        user_id=test_user.id,
+        status=DocumentStatus.UPLOADED,
+        is_public=False,  # Private document
+        description="Private test document",
+        tags="private,test",
+        content="This is a private test document."
+    )
+    
+    db_session.add(document)
+    db_session.commit()
+    db_session.refresh(document)
+    
+    return document
+
+@pytest.fixture
+def admin_document(db_session, admin_user):
+    """Create a test document owned by admin"""
+    from app.models.document import Document, DocumentStatus
+    
+    document = Document(
+        filename="admin_document_789.txt",
+        original_filename="admin_document.txt",
+        file_size=2048,
+        file_type="text",
+        local_path="/tmp/admin_document_789.txt",
+        uploaded_by=admin_user.id,
+        user_id=admin_user.id,
+        status=DocumentStatus.UPLOADED,
+        is_public=True,
+        description="Admin's test document",
+        tags="admin,test",
+        content="This is admin's test document."
+    )
+    
+    db_session.add(document)
+    db_session.commit()
+    db_session.refresh(document)
+    
+    return document
+
+@pytest.fixture
+def pdf_document(db_session, test_user):
+    """Create a PDF test document"""
+    from app.models.document import Document, DocumentStatus
+    
+    document = Document(
+        filename="test_document_999.pdf",
+        original_filename="test_document.pdf",
+        file_size=3072,
+        file_type="pdf",
+        local_path="/tmp/test_document_999.pdf",
+        uploaded_by=test_user.id,
+        user_id=test_user.id,
+        status=DocumentStatus.UPLOADED,
+        is_public=True,
+        description="PDF test document",
+        tags="pdf,test",
+        content=None  # PDFs don't have content field
+    )
+    
+    db_session.add(document)
+    db_session.commit()
+    db_session.refresh(document)
+    
+    return document
+
+@pytest.fixture
+def multiple_documents(db_session, test_user):
+    """Create multiple test documents"""
+    from app.models.document import Document, DocumentStatus
+    
+    documents = []
+    
+    for i in range(5):
+        document = Document(
+            filename=f"multi_doc_{i}.txt",
+            original_filename=f"document_{i}.txt",
+            file_size=512 * (i + 1),
+            file_type="text",
+            local_path=f"/tmp/multi_doc_{i}.txt",
+            uploaded_by=test_user.id,
+            user_id=test_user.id,
+            status=DocumentStatus.UPLOADED,
+            is_public=(i % 2 == 0),  # Alternate public/private
+            description=f"Test document {i}",
+            tags=f"test,document_{i}",
+            content=f"Content for document {i}"
+        )
+        
+        db_session.add(document)
+        documents.append(document)
+    
+    db_session.commit()
+    
+    # Refresh all documents
+    for doc in documents:
+        db_session.refresh(doc)
+    
+    return documents
+
+@pytest.fixture
+def document_crud():
+    """Provide document CRUD instance (if you have one)"""
+    # If you have a document CRUD class
+    try:
+        from app.crud.document import document_crud
+        return document_crud
+    except ImportError:
+        # Return a mock or None if not implemented
+        return None
+
+@pytest.fixture
+def mock_file_operations(mocker):
+    """Mock file system operations for testing"""
+    # Mock os.path.exists
+    mock_exists = mocker.patch('os.path.exists')
+    mock_exists.return_value = True
+    
+    # Mock os.remove
+    mock_remove = mocker.patch('os.remove')
+    
+    # Mock open for file reading
+    mock_open = mocker.patch('builtins.open', mocker.mock_open(read_data="File content"))
+    
+    return {
+        'exists': mock_exists,
+        'remove': mock_remove,
+        'open': mock_open
+    }
+
+@pytest.fixture
+def temp_upload_dir(tmp_path):
+    """Create temporary upload directory for tests"""
+    upload_dir = tmp_path / "uploads"
+    upload_dir.mkdir()
+    
+    # Override settings for tests
+    original_upload_dir = None
+    try:
+        from app.core.config import settings
+        original_upload_dir = settings.UPLOAD_DIR
+        settings.UPLOAD_DIR = str(upload_dir)
+    except:
+        pass
+    
+    yield upload_dir
+    
+    # Restore original settings
+    if original_upload_dir:
+        settings.UPLOAD_DIR = original_upload_dir
+
+# Also update your extreme_cleanup fixture to clean documents:
+@pytest.fixture(autouse=True)
+def extreme_cleanup(db_session: Session):
+    """
+    Extreme cleanup to avoid any conflicts
+    """
+    # Store current state
+    yield
+    
+    # Clean EVERYTHING after each test
+    try:
+        # Delete all documents
+        from app.models.document import Document
+        db_session.query(Document).delete()
+        
+        # Delete all reviews
+        from app.models.review import Review
+        db_session.query(Review).delete()
+        
+        # Delete all books
+        from app.models.book import Book
+        db_session.query(Book).delete()
+        
+        # Delete all auth tokens
+        db_session.query(AuthToken).delete()
+        
+        # Delete all users (except maybe default roles)
+        db_session.query(User).filter(
+            User.username.notlike("role_%")
+        ).delete(synchronize_session=False)
+        
+        db_session.commit()
+    except Exception as e:
+        db_session.rollback()
+        logger.debug(f"Cleanup warning: {e}")
+        
+@pytest.fixture
+def ingestion_service():
+    """Provide ingestion service instance"""
+    from app.services.ingestion_service import IngestionService
+    return IngestionService
+
+@pytest.fixture
+def mock_background_tasks():
+    """Mock background tasks"""
+    from fastapi import BackgroundTasks
+    return BackgroundTasks()  
+
+# Add to conftest.py
+import asyncio
+
+@pytest.fixture
+def event_loop():
+    """Create an instance of the default event loop for each test case."""
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
+
+@pytest.fixture
+def anyio_backend():
+    """Specify anyio backend for async tests."""
+    return 'asyncio'   
+
+@pytest.fixture
+def event_loop():
+    """Create an instance of the default event loop for each test case."""
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
+
+@pytest.fixture
+def anyio_backend():
+    """Specify anyio backend for async tests."""
+    return 'asyncio'   
