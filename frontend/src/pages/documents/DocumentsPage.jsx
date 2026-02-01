@@ -1,11 +1,11 @@
 // src/pages/documents/DocumentsPage.jsx
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Upload, 
-  FileText, 
-  Download, 
-  Trash2, 
-  Search, 
+import {
+  Upload,
+  FileText,
+  Download,
+  Trash2,
+  Search,
   RefreshCw,
   CheckCircle,
   XCircle,
@@ -16,24 +16,24 @@ import {
 import { useDocuments } from '../../store/document.context';
 import Loader from '../../components/common/Loader';
 import alerts from '../../utils/alerts';
-import './DocumentsPage.css'; // Import CSS
+import './DocumentsPage.css';
 
 function DocumentsPage() {
   const fileInputRef = useRef(null);
   const [dragOver, setDragOver] = useState(false);
-  
+
   // Get context values
-  const { 
-    documents, 
-    loading, 
+  const {
+    documents,
+    loading,
     uploadProgress,
-    fetchAllDocuments, 
+    fetchAllDocuments,
     uploadDocument,
     deleteDocument,
     downloadDocument,
     searchDocuments
   } = useDocuments();
-  
+
   // Local state
   const [uploading, setUploading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -41,7 +41,7 @@ function DocumentsPage() {
     file_type: '',
     status: ''
   });
-  
+
   // Upload form state
   const [uploadForm, setUploadForm] = useState({
     file: null,
@@ -69,7 +69,7 @@ function DocumentsPage() {
   const handleDrop = (e) => {
     e.preventDefault();
     setDragOver(false);
-    
+
     const file = e.dataTransfer.files[0];
     if (file) {
       handleFileValidation(file);
@@ -82,8 +82,8 @@ function DocumentsPage() {
     const validExtensions = ['.pdf', '.txt'];
     const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
 
-    if (!validTypes.includes(file.type) && 
-        !validExtensions.includes(fileExtension)) {
+    if (!validTypes.includes(file.type) &&
+      !validExtensions.includes(fileExtension)) {
       alerts.error('Invalid File', 'Only PDF and TXT files are allowed.');
       return;
     }
@@ -110,7 +110,7 @@ function DocumentsPage() {
   // Handle upload
   const handleUpload = async (e) => {
     e.preventDefault();
-    
+
     if (!uploadForm.file) {
       await alerts.error('Error', 'Please select a file to upload.');
       return;
@@ -118,7 +118,7 @@ function DocumentsPage() {
 
     try {
       setUploading(true);
-      
+
       const metadata = {
         description: uploadForm.description,
         tags: uploadForm.tags,
@@ -126,7 +126,7 @@ function DocumentsPage() {
       };
 
       await uploadDocument(uploadForm.file, metadata);
-      
+
       // Reset form
       setUploadForm({
         file: null,
@@ -134,7 +134,7 @@ function DocumentsPage() {
         tags: '',
         is_public: true
       });
-      
+
       // Reset file input
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -154,7 +154,7 @@ function DocumentsPage() {
       fetchAllDocuments(filters);
       return;
     }
-    
+
     try {
       await searchDocuments(searchQuery, filters);
     } catch (error) {
@@ -268,7 +268,7 @@ function DocumentsPage() {
                 <label className="block text-sm font-medium mb-2">
                   Select File
                 </label>
-                <div 
+                <div
                   className={`file-upload-area ${dragOver ? 'dragover' : ''} ${uploadForm.file ? 'has-file' : ''}`}
                   onClick={() => fileInputRef.current?.click()}
                   onDragOver={handleDragOver}
@@ -281,7 +281,9 @@ function DocumentsPage() {
                     className="hidden"
                     onChange={handleFileSelect}
                     accept=".pdf,.txt,application/pdf,text/plain"
+                    data-testid="file-input"
                   />
+
                   {uploadForm.file ? (
                     <div className="file-preview">
                       <FileUp className="file-preview-icon text-blue-500" size={32} />
@@ -375,6 +377,7 @@ function DocumentsPage() {
                 type="submit"
                 disabled={uploading || !uploadForm.file}
                 className="upload-button"
+                data-testid="upload-button"
               >
                 {uploading ? (
                   <>
@@ -409,7 +412,7 @@ function DocumentsPage() {
                   <Search className="search-icon" size={20} />
                 </form>
               </div>
-              
+
               <div className="filters-container">
                 <select
                   value={filters.file_type}
@@ -421,7 +424,7 @@ function DocumentsPage() {
                   <option value="pdf">PDF</option>
                   <option value="text">Text</option>
                 </select>
-                
+
                 <select
                   value={filters.status}
                   onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
@@ -433,7 +436,7 @@ function DocumentsPage() {
                   <option value="processing">Processing</option>
                   <option value="failed">Failed</option>
                 </select>
-                
+
                 <button
                   onClick={() => fetchAllDocuments(filters)}
                   disabled={loading}
