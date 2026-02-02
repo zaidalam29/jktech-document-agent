@@ -797,15 +797,6 @@ docker compose exec frontend npm test
 
 ---
 
-
-## Folder Structure
-
-### Backend & Frontend Folder Structure
-![folder-structure](screenshots/folder-structure.png)
-
-
----
-
 © 2026 Zaid Alam
 Full Stack Developer & Gen AI Engineer
 JKTech Version 2.0
