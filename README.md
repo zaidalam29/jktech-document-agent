@@ -474,6 +474,43 @@ docker compose exec frontend npm test
 - **Password:** `12345678`
 ---
 
+## Test Cases
+
+### Backend Test Case
+
+================================================= test session starts ==================================================
+platform linux -- Python 3.10.0, pytest-9.0.2, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /app
+configfile: pytest.ini
+testpaths: tests
+plugins: mock-3.15.1, asyncio-1.3.0, anyio-4.12.1, cov-7.0.0
+asyncio: mode=strict, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 180 items
+
+
+### Test Result
+
+tests/test_admin.py::TestAdminAPI::test_get_all_users_as_admin PASSED                                            [  0%]
+tests/test_admin.py::TestAdminAPI::test_get_all_users_as_regular_user PASSED                                     [  1%]
+tests/test_admin.py::TestAdminAPI::test_get_all_users_unauthenticated PASSED                                     [  1%]
+tests/test_admin.py::TestAdminAPI::test_update_user_roles_as_admin PASSED                                        [  2%]
+tests/test_admin.py::TestAdminAPI::test_update_nonexistent_user_roles PASSED                                     [  2%]
+tests/test_admin.py::TestAdminAPI::test_toggle_user_active_status PASSED                                         [  3%]
+tests/test_admin.py::TestAdminAPI::test_toggle_nonexistent_user PASSED                                           [  3%]
+tests/test_admin.py::TestUserCRUD::test_get_user_by_username PASSED                                              [  4%]
+tests/test_admin.py::TestUserCRUD::test_authenticate_user PASSED                                                 [  5%]
+tests/test_admin.py::TestUserCRUD::test_authenticate_wrong_password PASSED                                       [  5%]
+tests/test_admin.py::TestUserCRUD::test_authenticate_inactive_user PASSED                                        [  6%]
+tests/test_admin.py::TestUserCRUD::test_get_user_details PASSED                                                  [  6%]
+tests/test_admin.py::TestUserCRUD::test_count_users PASSED                                                       [  7%]
+tests/test_admin.py::TestRoleCRUD::test_get_role_by_name PASSED                                                  [  7%]
+tests/test_admin.py::TestRoleCRUD::test_get_all_roles PASSED                                                     [  8%]
+tests/test_admin.py::TestRoleCRUD::test_create_and_delete_role PASSED                                            [  8%]
+tests/test_admin.py::TestRoleCRUD::test_cannot_delete_system_role PASSED                                         [  9%]
+tests/test_admin.py::test_admin_production_readiness PASSED                                                      [ 10%]
+---
+
 ## Folder Structure
 
 ### Backend & Frontend Folder Structure
