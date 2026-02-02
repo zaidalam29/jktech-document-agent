@@ -685,7 +685,7 @@ def run_rag_status_test_suite():
         for test in tests:
             print(f"    • {test}")
     
-    print("\n🚀 To run tests: pytest tests/test_rag_status.py -v")
+    print("\nTo run tests: pytest tests/test_rag_status.py -v")
     print("📈 For coverage: pytest tests/test_rag_status.py --cov --cov-report=html")
     print("="*60)
 

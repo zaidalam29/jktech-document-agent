@@ -472,16 +472,16 @@ def test_qa_production_readiness():
     print("="*60)
     
     metrics = [
-        ("Document-Specific QA", "✅ Ask questions to specific documents"),
-        ("Authentication", "✅ Required for all operations"),
-        ("Authorization", "✅ Document access validation"),
-        ("Ingestion Check", "✅ Verifies document is ingested"),
-        ("Response Format", "✅ Structured response with confidence score"),
-        ("Source Attribution", "✅ Identifies source document"),
-        ("RAG Management", "✅ Remove documents from RAG index"),
-        ("Error Handling", "✅ Proper HTTP status codes"),
-        ("Question Validation", "✅ Min/max length enforcement"),
-        ("Permission Control", "✅ Private document protection"),
+        ("Document-Specific QA", "Ask questions to specific documents"),
+        ("Authentication", "Required for all operations"),
+        ("Authorization", "Document access validation"),
+        ("Ingestion Check", "Verifies document is ingested"),
+        ("Response Format", "Structured response with confidence score"),
+        ("Source Attribution", "Identifies source document"),
+        ("RAG Management", "Remove documents from RAG index"),
+        ("Error Handling", "Proper HTTP status codes"),
+        ("Question Validation", "Min/max length enforcement"),
+        ("Permission Control", "Private document protection"),
     ]
     
     for metric, status in metrics:

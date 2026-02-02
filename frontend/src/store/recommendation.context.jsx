@@ -63,7 +63,7 @@ export const RecommendationProvider = ({ children }) => {
     });
   }, []);
 
-  // ✅ MAIN FUNCTION: SINGLE API CALL - सभी data एक ही बार में fetch करेगा
+  // MAIN FUNCTION: SINGLE API CALL - सभी data एक ही बार में fetch करेगा
   const fetchAllDataAtOnce = useCallback(async (forceRefresh = false) => {
     // Prevent multiple simultaneous calls
     if (isLoadingRef.current) {
@@ -82,9 +82,9 @@ export const RecommendationProvider = ({ children }) => {
       isLoadingRef.current = true;
       setLoading(true);
       setError(null);
-      console.log('🚀 Fetching ALL recommendation data in ONE call...');
+      console.log('Fetching ALL recommendation data in ONE call...');
 
-      // ✅ Parallel calls with Promise.allSettled
+      // Parallel calls with Promise.allSettled
       const [personalizedData, popularData, newData, statsData] = await Promise.allSettled([
         recommendationService.getPersonalizedRecommendations({
           ...filters,
@@ -132,7 +132,6 @@ export const RecommendationProvider = ({ children }) => {
       lastLoadTimeRef.current = Date.now();
       isLoadingRef.current = false;
 
-      // ✅ केवल एक notification
       addNotification({
         type: 'success',
         message: `Loaded ${recommendations.personalized.length} personalized, ${recommendations.popular.length} popular, and ${recommendations.new.length} new recommendations!`
@@ -144,7 +143,6 @@ export const RecommendationProvider = ({ children }) => {
       isLoadingRef.current = false;
       logger.error('Fetch all data error:', error);
       
-      // ✅ केवल important errors के लिए
       if (error.status !== 422) {
         setError(error.message);
         addNotification({
@@ -159,12 +157,12 @@ export const RecommendationProvider = ({ children }) => {
     }
   }, [filters, addNotification]);
 
-  // ✅ SIMPLIFIED loadAllRecommendations - sirf ek function call karega
+  // SIMPLIFIED loadAllRecommendations - sirf ek function call karega
   const loadAllRecommendations = useCallback(async () => {
     return await fetchAllDataAtOnce(false);
   }, [fetchAllDataAtOnce]);
 
-  // ✅ Refresh function - force refresh karega
+  // Refresh function - force refresh karega
   const refreshRecommendations = useCallback(async () => {
     console.log('🔄 Force refreshing all recommendations...');
     // Clear cache timestamp to force reload
@@ -172,7 +170,7 @@ export const RecommendationProvider = ({ children }) => {
     return await fetchAllDataAtOnce(true);
   }, [fetchAllDataAtOnce]);
 
-  // ✅ Fetch ONLY personalized with filters (tab switch ke liye)
+  // Fetch ONLY personalized with filters (tab switch ke liye)
   const fetchPersonalizedOnly = useCallback(async (customFilters = {}) => {
     try {
       setLoading(true);
@@ -205,12 +203,12 @@ export const RecommendationProvider = ({ children }) => {
     }
   }, [filters]);
 
-  // ✅ Rate recommendation - LOCAL STORAGE VERSION
+  // Rate recommendation - LOCAL STORAGE VERSION
   const rateRecommendation = useCallback(async (bookId, rating, feedback = '') => {
     try {
       console.log(`⭐ Local rating for book ${bookId}:`, rating);
       
-      // ✅ TEMPORARY FIX: Backend endpoint नहीं है, इसलिए local state update करें
+      // TEMPORARY FIX: Backend endpoint नहीं है, इसलिए local state update करें
       // Book को liked/disliked marked करें
       setAllRecommendations(prev => {
         const updatedPersonalized = prev.personalized.map(book => {
@@ -231,7 +229,7 @@ export const RecommendationProvider = ({ children }) => {
         };
       });
       
-      // ✅ Also save to local storage
+      // Also save to local storage
       const userRatings = JSON.parse(localStorage.getItem('book_ratings') || '{}');
       userRatings[bookId] = {
         rating,
@@ -240,7 +238,7 @@ export const RecommendationProvider = ({ children }) => {
       };
       localStorage.setItem('book_ratings', JSON.stringify(userRatings));
       
-      // ✅ Success notification
+      // Success notification
       addNotification({
         type: 'success',
         message: rating >= 4 ? 'Book liked!' : 'Book disliked!'
@@ -254,7 +252,7 @@ export const RecommendationProvider = ({ children }) => {
     }
   }, [addNotification]);
 
-  // ✅ Clear cache
+  // Clear cache
   const clearRecommendationCache = useCallback(async () => {
     try {
       await recommendationService.clearRecommendationCache();
@@ -274,7 +272,7 @@ export const RecommendationProvider = ({ children }) => {
     }
   }, [addNotification]);
 
-  // ✅ Get user ratings from localStorage
+  // Get user ratings from localStorage
   const getUserRatings = useCallback(() => {
     return JSON.parse(localStorage.getItem('book_ratings') || '{}');
   }, []);
@@ -292,9 +290,9 @@ export const RecommendationProvider = ({ children }) => {
     availableFilters,
 
     // Actions - ONLY THESE MAIN FUNCTIONS
-    loadAllRecommendations,    // ✅ Initial load (ONE TIME)
-    refreshRecommendations,    // ✅ Force refresh
-    fetchPersonalizedOnly,     // ✅ Filter changes ke liye
+    loadAllRecommendations,    // Initial load (ONE TIME)
+    refreshRecommendations,    // Force refresh
+    fetchPersonalizedOnly,     // Filter changes ke liye
     
     // Other actions
     rateRecommendation,

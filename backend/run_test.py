@@ -9,7 +9,7 @@ import subprocess
 
 def run_tests():
     """Run pytest with appropriate settings"""
-    print("🚀 Running Production Test Suite...")
+    print("Running Production Test Suite...")
     print("=" * 60)
     
     # Set test environment variables
@@ -35,9 +35,9 @@ def run_tests():
     
     print("=" * 60)
     if result.returncode == 0:
-        print("✅ All tests passed!")
+        print("All tests passed!")
     else:
-        print(f"❌ Tests failed with exit code: {result.returncode}")
+        print(f"Tests failed with exit code: {result.returncode}")
     
     return result.returncode
 

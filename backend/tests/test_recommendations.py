@@ -641,18 +641,18 @@ def test_recommendation_production_readiness():
     print("="*60)
     
     metrics = [
-        ("Personalized Recommendations", "✅ User-specific recommendations"),
-        ("Popular Recommendations", "✅ Trending/popular books"),
-        ("New Releases", "✅ Recent publications"),
-        ("Filtering", "✅ Genre, author, rating filters"),
-        ("Cache Management", "✅ User cache with clearance"),
-        ("Rate Limiting", "✅ Request limiting per user"),
-        ("Error Handling", "✅ Structured error responses"),
-        ("Response Format", "✅ Consistent response schema"),
-        ("Authentication", "✅ Required for all endpoints"),
-        ("Statistics", "✅ System and user stats"),
-        ("Logging", "✅ Structured logging"),
-        ("Validation", "✅ Input validation with Pydantic"),
+        ("Personalized Recommendations", "User-specific recommendations"),
+        ("Popular Recommendations", "Trending/popular books"),
+        ("New Releases", "Recent publications"),
+        ("Filtering", "Genre, author, rating filters"),
+        ("Cache Management", "User cache with clearance"),
+        ("Rate Limiting", "Request limiting per user"),
+        ("Error Handling", "Structured error responses"),
+        ("Response Format", "Consistent response schema"),
+        ("Authentication", "Required for all endpoints"),
+        ("Statistics", "System and user stats"),
+        ("Logging", "Structured logging"),
+        ("Validation", "Input validation with Pydantic"),
     ]
     
     for metric, status in metrics:

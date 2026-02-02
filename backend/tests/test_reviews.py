@@ -299,7 +299,7 @@ class TestReviewsAPI:
         assert our_review["review_text"] == created_review["review_text"]
         assert our_review["rating"] == created_review["rating"]
         
-        print("✅ Test passed!")
+        print("Test passed!")
         print("="*60)
     
     def test_get_my_reviews_unauthenticated(self, client):

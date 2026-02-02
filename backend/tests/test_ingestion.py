@@ -554,7 +554,7 @@ class TestIngestionService:
         # Note: Since we mocked the main method, no actual job will be created
         # This test just verifies the mocking works
         
-        print("✅ Ingestion service test passed (with mocking)")
+        print("Ingestion service test passed (with mocking)")
         
         @pytest.mark.asyncio
         async def test_ingest_document_step1_failure(self, mocker, db_session):
@@ -689,16 +689,16 @@ def test_ingestion_production_readiness():
     print("="*60)
     
     metrics = [
-        ("Document Ingestion", "✅ Start ingestion endpoint"),
-        ("Status Tracking", "✅ Real-time status monitoring"),
-        ("Background Processing", "✅ Async background tasks"),
-        ("Error Handling", "✅ Job failure tracking"),
-        ("Permission Control", "✅ Document access validation"),
-        ("Duplicate Prevention", "✅ Already-ingested check"),
-        ("Concurrency Control", "✅ Already-processing check"),
-        ("Job History", "✅ Multiple job tracking"),
-        ("Metrics Tracking", "✅ Chunks, pages, word count"),
-        ("Admin Dashboard", "✅ All jobs listing with filters"),
+        ("Document Ingestion", "Start ingestion endpoint"),
+        ("Status Tracking", "Real-time status monitoring"),
+        ("Background Processing", "Async background tasks"),
+        ("Error Handling", "Job failure tracking"),
+        ("Permission Control", "Document access validation"),
+        ("Duplicate Prevention", "Already-ingested check"),
+        ("Concurrency Control", "Already-processing check"),
+        ("Job History", "Multiple job tracking"),
+        ("Metrics Tracking", "Chunks, pages, word count"),
+        ("Admin Dashboard", "All jobs listing with filters"),
     ]
     
     for metric, status in metrics:

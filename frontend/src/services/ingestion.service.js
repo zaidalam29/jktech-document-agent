@@ -105,7 +105,7 @@ class IngestionService {
    */
   async startIngestion(documentId) {
     try {
-      console.log('🚀 Starting ingestion for document ID:', documentId);
+      console.log('Starting ingestion for document ID:', documentId);
       const data = await this.apiFetch(`/ingestion/documents/${documentId}/ingest`, {
         method: 'POST',
       });

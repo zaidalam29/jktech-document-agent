@@ -323,15 +323,15 @@ class TestDocumentsAPI:
             # If document is public, admin SHOULD have access
             response = client.get(f"/api/v1/documents/{document_id}", headers=admin_headers)
             assert response.status_code == status.HTTP_200_OK
-            print("✅ Admin can access public document (expected)")
+            print("Admin can access public document (expected)")
         else:
-            print("✅ Document is private")
+            print("Document is private")
             print("Testing private document access control...")
             
             # If document is private, admin should NOT have access
             response = client.get(f"/api/v1/documents/{document_id}", headers=admin_headers)
             assert response.status_code == status.HTTP_403_FORBIDDEN
-            print("✅ Admin correctly denied access to private document")
+            print("Admin correctly denied access to private document")
         
         print("="*60)
 
@@ -447,7 +447,7 @@ class TestDocumentsAPI:
         if admin_response.status_code == 403:
             error_data = admin_response.json()
             print(f"  Error message: {error_data.get('error', {}).get('message', error_data)}")
-            print("✅ Admin correctly denied access to private document")
+            print("Admin correctly denied access to private document")
         elif admin_response.status_code == 200:
             admin_data = admin_response.json()
             print(f"  WARNING: Admin can access private document!")
@@ -467,7 +467,7 @@ class TestDocumentsAPI:
             assert admin_response.status_code == status.HTTP_403_FORBIDDEN, \
                 f"Admin should not access private document. Got {admin_response.status_code}"
         
-        print("\n✅ Test completed successfully!")
+        print("Test completed successfully!")
     
     @patch('app.utils.file_upload.save_file_locally')
     @patch('app.utils.file_upload.validate_file')
@@ -831,7 +831,7 @@ class TestFileUpload:
         assert "_" in sanitized
         assert sanitized == "test_file_with_spaces.txt"
         
-        print("\n✅ All assertions passed!")
+        print("All assertions passed!")
         print("Note: The word 'script' is allowed in filenames.")
         print("Only dangerous characters are removed.")
         print("="*60)
@@ -845,16 +845,16 @@ def test_document_production_readiness():
     print("="*60)
     
     metrics = [
-        ("File Upload", "✅ PDF and TXT file support"),
-        ("File Validation", "✅ Type and size validation"),
-        ("Storage", "✅ Local file storage"),
-        ("Access Control", "✅ Public/Private document visibility"),
-        ("Ownership", "✅ User-based document ownership"),
-        ("Document Listing", "✅ Filtering and pagination"),
-        ("Document Retrieval", "✅ Get by ID with permissions"),
-        ("File Download", "✅ Secure file download"),
-        ("Document Deletion", "✅ Delete with file cleanup"),
-        ("Error Handling", "✅ Proper permission errors"),
+        ("File Upload", "PDF and TXT file support"),
+        ("File Validation", "Type and size validation"),
+        ("Storage", "Local file storage"),
+        ("Access Control", "Public/Private document visibility"),
+        ("Ownership", "User-based document ownership"),
+        ("Document Listing", "Filtering and pagination"),
+        ("Document Retrieval", "Get by ID with permissions"),
+        ("File Download", "Secure file download"),
+        ("Document Deletion", "Delete with file cleanup"),
+        ("Error Handling", "Proper permission errors"),
     ]
     
     for metric, status in metrics:

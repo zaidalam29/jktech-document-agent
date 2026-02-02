@@ -260,16 +260,16 @@ def test_review_analysis_production_readiness():
     print("="*60)
     
     metrics = [
-        ("Advanced Summaries", "✅ AI-powered review analysis"),
-        ("Quick Summaries", "✅ Fast cached responses"),
-        ("Caching System", "✅ Smart caching with TTL"),
-        ("Background Processing", "✅ Async refresh tasks"),
-        ("Status Monitoring", "✅ Cache and eligibility checks"),
-        ("Batch Operations", "✅ Multiple book summaries"),
-        ("Parameter Control", "✅ Detailed vs simple, AI on/off"),
-        ("Error Handling", "✅ Graceful degradation"),
-        ("Public Access", "✅ No authentication required"),
-        ("Input Validation", "✅ ID validation, max limits"),
+        ("Advanced Summaries", "AI-powered review analysis"),
+        ("Quick Summaries", "Fast cached responses"),
+        ("Caching System", "Smart caching with TTL"),
+        ("Background Processing", "Async refresh tasks"),
+        ("Status Monitoring", "Cache and eligibility checks"),
+        ("Batch Operations", "Multiple book summaries"),
+        ("Parameter Control", "Detailed vs simple, AI on/off"),
+        ("Error Handling", "Graceful degradation"),
+        ("Public Access", "No authentication required"),
+        ("Input Validation", "ID validation, max limits"),
     ]
     
     for metric, status in metrics:

@@ -29,10 +29,6 @@ venv/
 .env
 
 .DS_Store
-*.sqlite
-*.db
-test.db
-tests/
 .gitignore
 
 README.md

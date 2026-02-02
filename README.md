@@ -18,6 +18,7 @@ It consists of **backend (FastAPI + PostgreSQL)** and **frontend (React + Nginx)
 6. [CI/CD](#cicd)
 7. [Tech Stack](#tech-stack)
 8. [Frontend Features](#frontend-features)
+9. [Folder Structure](#folder-structure)
 
 ---
 
@@ -222,14 +223,6 @@ docker-compose build frontend
 
 ---
 
-## Folder Structure
-
-### Backend & Frontend Folder Structure
-![folder-structure](screenshots/folder-structure.png)
-
-
----
-
 ### Installation
 
 ```bash
@@ -405,6 +398,16 @@ docker-compose up --build
 docker-compose down
 ```
 
+### Test Backend Command
+
+```bash
+docker compose exec backend pytest
+```
+### Test Frontend Command
+
+```bash
+docker compose exec frontend npm test
+```
 ---
 
 ## RAG Implementation
@@ -461,19 +464,22 @@ docker-compose down
 ## Running Links
 
 * Backend API Docs: `http://localhost:8000/docs`
-* Frontend Application: `http://localhost:3000`
+* Dcoker Frontend Application: `http://localhost:3000`
+* Local Frontend Application: `http://localhost:5173`
 
 ---
 
-## Admin Access
-
-<!-- ### All Tests Passed
-![Test Results](screenshots/tests-passed.png) -->
-
 ### Default Admin Login
-![Admin Credentials](screenshots/admin-credentials.png)
 - **Username:** `admin`  
 - **Password:** `12345678`
+---
+
+## Folder Structure
+
+### Backend & Frontend Folder Structure
+![folder-structure](screenshots/folder-structure.png)
+
+
 ---
 
 © 2026 Zaid Alam

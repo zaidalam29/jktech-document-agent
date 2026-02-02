@@ -29,7 +29,7 @@ settings.TESTING = True
 TEST_DATABASE_URL = "sqlite:///:memory:"
 
 print("\n" + "="*60)
-print("🚀 Setting up SQLite in-memory database for tests")
+print("Setting up SQLite in-memory database for tests")
 print("="*60 + "\n")
 
 # Create test engine

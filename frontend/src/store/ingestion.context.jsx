@@ -92,7 +92,7 @@ export const IngestionProvider = ({ children }) => {
       setIngestionProgress(0);
       setIngestionStatus('Starting ingestion...');
       
-      console.log(`🚀 Starting ingestion for document ID: ${documentId}`);
+      console.log(`Starting ingestion for document ID: ${documentId}`);
       
       // Add to active ingestions
       setActiveIngestions(prev => new Set([...prev, documentId]));
@@ -156,7 +156,7 @@ export const IngestionProvider = ({ children }) => {
       setIngestionProgress(0);
       setIngestionStatus('Starting batch ingestion...');
       
-      console.log(`🚀 Starting batch ingestion for ${documentIds.length} documents`);
+      console.log(`Starting batch ingestion for ${documentIds.length} documents`);
       
       // Add all to active ingestions
       setActiveIngestions(prev => new Set([...prev, ...documentIds]));

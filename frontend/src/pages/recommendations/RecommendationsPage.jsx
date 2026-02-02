@@ -48,14 +48,14 @@ function RecommendationsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [ratingBook, setRatingBook] = useState(null);
 
-  // ✅ SIRF EK HI BAAR CALL - component mount par
+  // SIRF EK HI BAAR CALL - component mount par
   useEffect(() => {
     console.log('🎯 Component mounted - loading recommendations ONCE');
     loadAllRecommendations();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // ✅ Empty dependency array = sirf ek baar
+  }, []); // Empty dependency array = sirf ek baar
 
-  // ✅ Tab change handler
+  // Tab change handler
   const handleTabChange = useCallback((tab) => {
     setActiveTab(tab);
     
@@ -65,24 +65,24 @@ function RecommendationsPage() {
     }
   }, [personalizedRecs.length, loading, fetchPersonalizedOnly]);
 
-  // ✅ Filter apply handler
+  // Filter apply handler
   const handleApplyFilters = useCallback((newFilters) => {
     updateFilters(newFilters);
     fetchPersonalizedOnly(newFilters);
     setShowFilters(false);
   }, [updateFilters, fetchPersonalizedOnly]);
 
-  // ✅ Refresh handler
+  // Refresh handler
   const handleRefresh = useCallback(async () => {
     await refreshRecommendations();
   }, [refreshRecommendations]);
 
-  // ✅ Clear cache handler
+  // Clear cache handler
   const handleClearCache = useCallback(async () => {
     await clearRecommendationCache();
   }, [clearRecommendationCache]);
 
-  // ✅ Rate handler
+  // Rate handler
   const handleRate = useCallback(async (bookId, rating) => {
     setRatingBook(bookId);
     try {
@@ -94,7 +94,7 @@ function RecommendationsPage() {
     }
   }, [rateRecommendation]);
 
-  // ✅ Get active recommendations
+  // Get active recommendations
   const getActiveRecommendations = () => {
     switch (activeTab) {
       case 'personalized':
@@ -108,7 +108,7 @@ function RecommendationsPage() {
     }
   };
 
-  // ✅ Book Card Component (simplified)
+  // Book Card Component (simplified)
   const BookCard = ({ book, type = 'personalized' }) => (
     <div className={`book-card ${type}`}>
       <div className="book-header">
