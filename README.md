@@ -1,11 +1,10 @@
-# JKTech Document Intelligence & QnA System
+# JKTech Document Intelligence & Q&A System
 
 **Author:** Zaid Alam
-**Role:** Full Stack Developer & Generative AI Engineer
+**Role:** Full Stack Developer & Generative AI/ML Engineer
 
-This repository contains a **full-stack document intelligence platform** with **AI-powered search and summarization** capabilities.
-It consists of **backend (FastAPI + PostgreSQL)** and **frontend (React + Nginx)**, fully dockerized for local development and deployment.
-
+This project features a comprehensive **full-stack platform for document intelligence**, offering **AI-driven search and content summarization**.
+It includes a **backend built with FastAPI and PostgreSQL** and a **frontend using React and Nginx**, all fully dockerized for both local development and deployment.
 ---
 
 ## Table of Contents
@@ -723,14 +722,81 @@ docker compose exec frontend npm test
 
 ## 🚀 How to Run Tests
 
-### Prerequisites
-- Docker and Docker Compose installed
-- Project set up with `docker-compose.yml`
-
 ### Running All Tests
 ```bash
 docker compose exec backend pytest
+```
+
+
+## 🧪 Frontend Test Execution Summary
+
+### Quick Stats
+- **Total Tests**: 139
+- **✅ Passed**: 139 (100%)
+- **⏸️ Skipped**: 0
+- **❌ Failed**: 0
+- **⏱️ Duration**: 21.85 seconds
+- **🏗️ Test Framework**: Vitest v4.0.18
+- **⚛️ React Testing**: Vitest + React Testing Library
+
+### Test Categories Breakdown
+| Module Type | Test Files | Tests | Pass Rate |
+|------------|------------|-------|-----------|
+| Services | 3 | 50 | 100% |
+| Pages | 5 | 43 | 100% |
+| Contexts | 3 | 15 | 100% |
+| Utils | 4 | 37 | 100% |
+| Components | 1 | 4 | 100% |
+| **Total** | **15** | **139** | **100%** |
+
+## 🚀 Test Execution Command
+```bash
+docker compose exec frontend npm test
+```
+### Detailed Test Results
+
+* `src/tests/services/auth.service.test.js` - 28 tests ✓
+* `src/tests/services/qa.service.test.js` - 12 tests ✓
+* `src/tests/pages/IngestionPage.test.jsx` - 10 tests ✓
+
+  * renders the page correctly ✓
+  * calls refresh when refresh button is clicked ✓
+  * handles search input ✓
+  * button is disabled when no documents are selected ✓
+  * shows select documents dropdown button ✓
+* `src/tests/utils/token.test.js` - 15 tests ✓
+* `src/tests/pages/QAPage.test.jsx` - 12 tests ✓
+
+  * renders the page correctly ✓
+  * shows select document dropdown ✓
+  * displays documents in dropdown when clicked ✓
+  * allows selecting a document from dropdown ✓
+  * allows asking a question when document is selected ✓
+  * allows clearing answer history ✓
+  * shows only ingested documents in dropdown ✓
+  * allows searching documents in dropdown ✓
+* `src/tests/contexts/ingestion.context.test.jsx` - 5 tests ✓
+* `src/tests/services/BookService.test.js` - 10 tests ✓
+* `src/tests/pages/Register.test.jsx` - 5 tests ✓
+
+  * renders register form ✓
+  * registers successfully and navigates to dashboard ✓
+* `src/tests/utils/alerts.test.js` - 10 tests ✓
+* `src/tests/pages/DocumentsPage.test.jsx` - 6 tests ✓
+* `src/tests/contexts/qa.context.test.jsx` - 6 tests ✓
+* `src/tests/contexts/auth.context.test.jsx` - 4 tests ✓
+
+  * login button triggers login function ✓
+* `src/tests/utils/validators.test.js` - 10 tests ✓
+* `src/tests/utils/logger.test.js` - 2 tests ✓
+* `src/tests/components/Login.test.jsx` - 4 tests ✓
+
+  * renders login form ✓
+  * updates input values ✓
+  * calls login with username and password ✓
+
 ---
+
 
 ## Folder Structure
 
