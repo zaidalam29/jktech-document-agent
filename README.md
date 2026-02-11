@@ -813,6 +813,7 @@ docker compose exec frontend npm test
 ## Folder Structure
 
 ### Backend & Frontend Folder Structure
+```
 jktech-document-agent/
 │
 ├── 📦 backend/                    # FastAPI Backend Application
@@ -1104,7 +1105,7 @@ jktech-document-agent/
 └── 📄 .gitignore
 └── 📄 README.md
 
-
+```
 
 ---
 
