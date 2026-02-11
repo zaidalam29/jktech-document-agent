@@ -813,7 +813,297 @@ docker compose exec frontend npm test
 ## Folder Structure
 
 ### Backend & Frontend Folder Structure
-![folder-structure](screenshots/folder-structure.png)
+jktech-document-agent/
+│
+├── 📦 backend/                    # FastAPI Backend Application
+│   ├── 📄 .dockerignore
+│   ├── 📄 .env.example           # Environment variables template
+│   ├── 📄 .gitignore
+│   ├── 📄 README.md
+│   ├── 📄 alembic.ini           # Database migration config
+│   ├── 📄 docker-compose.yml
+│   ├── 📄 dockerfile
+│   ├── 📄 pytest.ini
+│   ├── 📄 requirements.txt
+│   ├── 📄 run_test.py
+│   ├── 📄 test_rag.py
+│   │
+│   ├── 🐍 app/                  # Core Application
+│   │   ├── 📁 api/            # API Routes
+│   │   │   └── __init__.py
+│   │   │
+│   │   ├── 📁 core/           # Core Configuration & Utilities
+│   │   │   ├── __init__.py
+│   │   │   ├── config.py     # App configuration
+│   │   │   ├── database.py   # DB connection
+│   │   │   ├── error_handlers.py
+│   │   │   ├── health_check.py
+│   │   │   ├── init_db.py    # Database initialization
+│   │   │   ├── logger.py     # Logging setup
+│   │   │   ├── security.py   # Security utilities
+│   │   │   └── vector_store.py # Vector DB operations
+│   │   │
+│   │   ├── 📁 crud/          # Database CRUD Operations
+│   │   │   ├── __init__.py
+│   │   │   ├── book.py
+│   │   │   ├── document.py
+│   │   │   ├── review.py
+│   │   │   └── user.py
+│   │   │
+│   │   ├── 📁 data/          # Persistent Data Storage
+│   │   │   ├── rag_embeddings.pkl
+│   │   │   └── rag_metadata.json
+│   │   │
+│   │   ├── 📁 middleware/    # Custom Middleware
+│   │   │   ├── rate_limit_middleware.py
+│   │   │   └── request_middleware.py
+│   │   │
+│   │   ├── 📁 models/       # Database Models
+│   │   │   ├── __init__.py
+│   │   │   ├── auth_token.py
+│   │   │   ├── book.py
+│   │   │   ├── document.py
+│   │   │   ├── ingestion_job.py
+│   │   │   ├── review.py
+│   │   │   └── user.py
+│   │   │
+│   │   ├── 📁 schemas/      # Pydantic Schemas
+│   │   │   ├── __init__.py
+│   │   │   ├── book.py
+│   │   │   ├── document.py
+│   │   │   ├── review.py
+│   │   │   └── user.py
+│   │   │
+│   │   ├── 📁 scripts/      # Utility Scripts
+│   │   │   └── init_rag.py
+│   │   │
+│   │   ├── 📁 services/     # Business Logic Services
+│   │   │   ├── __init__.py
+│   │   │   ├── ai_service.py
+│   │   │   ├── auth.py
+│   │   │   ├── book_service.py
+│   │   │   ├── cache_service.py
+│   │   │   ├── chunking_service.py
+│   │   │   ├── embedding_service.py
+│   │   │   ├── ingestion_service.py
+│   │   │   ├── llm_service.py
+│   │   │   ├── openrouter_embedding_service.py
+│   │   │   ├── openrouter_pdf_service.py
+│   │   │   ├── pdf_service.py
+│   │   │   ├── qa_service.py
+│   │   │   ├── rag_service.py
+│   │   │   ├── recommendation_service.py
+│   │   │   └── review_service.py
+│   │   │
+│   │   ├── 📁 utils/        # Utility Functions
+│   │   │   ├── __init__.py
+│   │   │   ├── file_upload.py
+│   │   │   ├── file_validators.py
+│   │   │   ├── helpers.py
+│   │   │   └── test_helpers.py
+│   │   │
+│   │   └── 📁 worker/       # Background Tasks
+│   │       ├── __init__.py
+│   │       └── tasks.py
+│   │
+│   └── 📁 tests/            # Backend Tests
+│       ├── __init__.py
+│       ├── conftest.py
+│       ├── test_admin.py
+│       ├── test_auth.py
+│       ├── test_books.py
+│       ├── test_documents.py
+│       ├── test_ingestion.py
+│       ├── test_qa.py
+│       ├── test_rag_status.py
+│       ├── test_recommendations.py
+│       ├── test_review_analysis.py
+│       └── test_reviews.py
+│
+├── 🎨 frontend/                 # React Frontend Application
+│   ├── 📄 .dockerignore
+│   ├── 📄 .env.example
+│   ├── 📄 .gitignore
+│   ├── 📄 Dockerfile
+│   ├── 📄 README.md
+│   ├── 📄 docker-compose.yml
+│   ├── 📄 eslint.config.js
+│   ├── 📄 index.html
+│   ├── 📄 jest.config.js
+│   ├── 📄 nginx.conf         # Nginx configuration for production
+│   ├── 📄 package-lock.json
+│   ├── 📄 package.json
+│   ├── 📄 vite.config.js
+│   │
+│   ├── 📁 public/           # Static Assets
+│   │   └── 📁 screenshots/ # UI Screenshots
+│   │
+│   ├── 📁 src/             # Source Code
+│   │   ├── 📁 app/        # Main App Components
+│   │   │   ├── App.css
+│   │   │   ├── App.jsx
+│   │   │   ├── ErrorBoundary.jsx
+│   │   │   └── Router.jsx
+│   │   │
+│   │   ├── 📁 assets/     # Images, Fonts, etc.
+│   │   │
+│   │   ├── 📁 components/ # Reusable UI Components
+│   │   │   ├── 📁 books/
+│   │   │   │   ├── BookDetailView.css
+│   │   │   │   ├── BookDetailView.jsx
+│   │   │   │   ├── BookFilters.css
+│   │   │   │   ├── BookFilters.jsx
+│   │   │   │   ├── BookGrid.css
+│   │   │   │   ├── BookGrid.jsx
+│   │   │   │   ├── EditBookForm.css
+│   │   │   │   ├── EditBookForm.jsx
+│   │   │   │   ├── ReviewsSection.css
+│   │   │   │   └── ReviewsSection.jsx
+│   │   │   │
+│   │   │   ├── 📁 common/  # Shared Components
+│   │   │   │   ├── Button.css
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── Input.css
+│   │   │   │   ├── Input.jsx
+│   │   │   │   ├── Loader.css
+│   │   │   │   ├── Loader.jsx
+│   │   │   │   ├── Notification.css
+│   │   │   │   └── Notification.jsx
+│   │   │   │
+│   │   │   └── 📁 layout/  # Layout Components
+│   │   │       ├── Layout.css
+│   │   │       ├── Layout.jsx
+│   │   │       ├── Navbar.css
+│   │   │       ├── Navbar.jsx
+│   │   │       ├── ProtectedRoute.jsx
+│   │   │       ├── Sidebar.css
+│   │   │       └── Sidebar.jsx
+│   │   │
+│   │   ├── 📁 config/      # App Configuration
+│   │   │   ├── env.js
+│   │   │   └── routes.js
+│   │   │
+│   │   ├── 📁 hooks/       # Custom React Hooks
+│   │   │   └── useAuth.js
+│   │   │
+│   │   ├── 📁 pages/       # Page Components
+│   │   │   ├── 📁 admin/
+│   │   │   │   ├── UsersPage.css
+│   │   │   │   └── UsersPage.jsx
+│   │   │   │
+│   │   │   ├── 📁 auth/
+│   │   │   │   ├── Login.css
+│   │   │   │   ├── Login.jsx
+│   │   │   │   ├── Profile.jsx
+│   │   │   │   ├── Register.css
+│   │   │   │   └── Register.jsx
+│   │   │   │
+│   │   │   ├── 📁 books/
+│   │   │   │   ├── BookCard.css
+│   │   │   │   ├── BookCard.jsx
+│   │   │   │   ├── BookDetails.css
+│   │   │   │   ├── BookDetails.jsx
+│   │   │   │   ├── BookDetailsModal.jsx
+│   │   │   │   ├── Books.css
+│   │   │   │   ├── Books.jsx
+│   │   │   │   ├── BooksList.jsx
+│   │   │   │   ├── CreateBook.css
+│   │   │   │   ├── CreateBook.jsx
+│   │   │   │   ├── CreateBookModal.jsx
+│   │   │   │   ├── EditBook.css
+│   │   │   │   ├── EditBook.jsx
+│   │   │   │   └── MyBooks.jsx
+│   │   │   │
+│   │   │   ├── 📁 dashboard/
+│   │   │   │   ├── Dashboard.css
+│   │   │   │   └── Dashboard.jsx
+│   │   │   │
+│   │   │   ├── 📁 documents/
+│   │   │   │   ├── DocumentsPage.css
+│   │   │   │   └── DocumentsPage.jsx
+│   │   │   │
+│   │   │   ├── 📁 ingestion/
+│   │   │   │   ├── IngestionPage.css
+│   │   │   │   └── IngestionPage.jsx
+│   │   │   │
+│   │   │   ├── 📁 qa/
+│   │   │   │   ├── QAPage.css
+│   │   │   │   └── QaPage.jsx
+│   │   │   │
+│   │   │   ├── 📁 recommendations/
+│   │   │   │   ├── RecommendationsPage.css
+│   │   │   │   └── RecommendationsPage.jsx
+│   │   │   │
+│   │   │   ├── 📁 Profile/
+│   │   │   │   ├── Profile.css
+│   │   │   │   └── Profile.jsx
+│   │   │   │
+│   │   │   ├── NotFound.jsx
+│   │   │   └── Unauthorized.jsx
+│   │   │
+│   │   ├── 📁 services/    # API Services
+│   │   │   ├── admin.service.js
+│   │   │   ├── auth.service.js
+│   │   │   ├── book.service.js
+│   │   │   ├── document.service.js
+│   │   │   ├── httpClient.js
+│   │   │   ├── ingestion.service.js
+│   │   │   ├── qa.service.js
+│   │   │   └── recommendation.service.js
+│   │   │
+│   │   ├── 📁 store/       # State Management
+│   │   │   ├── admin.context.jsx
+│   │   │   ├── app.context.jsx
+│   │   │   ├── auth.context.jsx
+│   │   │   ├── book.context.jsx
+│   │   │   ├── document.context.jsx
+│   │   │   ├── ingestion.context.jsx
+│   │   │   ├── qa.context.jsx
+│   │   │   └── recommendation.context.jsx
+│   │   │
+│   │   ├── 📁 tests/       # Frontend Tests
+│   │   │   ├── 📁 components/
+│   │   │   │   └── Login.test.jsx
+│   │   │   ├── 📁 contexts/
+│   │   │   │   ├── auth.context.test.jsx
+│   │   │   │   ├── ingestion.context.test.jsx
+│   │   │   │   └── qa.context.test.jsx
+│   │   │   ├── 📁 mocks/
+│   │   │   │   └── bookMocks.js
+│   │   │   ├── 📁 pages/
+│   │   │   │   ├── DocumentsPage.test.jsx
+│   │   │   │   ├── IngestionPage.test.jsx
+│   │   │   │   ├── QaPage.test.jsx
+│   │   │   │   └── Register.test.jsx
+│   │   │   ├── 📁 services/
+│   │   │   │   ├── BookService.test.js
+│   │   │   │   ├── auth.service.test.js
+│   │   │   │   └── qa.service.test.js
+│   │   │   ├── 📁 utils/
+│   │   │   │   ├── alerts.test.js
+│   │   │   │   ├── logger.test.js
+│   │   │   │   ├── test-helpers.js
+│   │   │   │   ├── token.test.js
+│   │   │   │   └── validators.test.js
+│   │   │   └── setup.js
+│   │   │
+│   │   └── 📁 utils/       # Frontend Utilities
+│   │       ├── __mocks__/
+│   │       │   └── logger.js
+│   │       ├── alerts.css
+│   │       ├── alerts.js
+│   │       ├── dateFormatter.js
+│   │       ├── logger.js
+│   │       ├── token.js
+│   │       └── validators.js
+│   │
+│   └── 📄 index.css        # Global Styles
+│   └── 📄 main.jsx        # Entry Point
+│
+└── 📄 docker-compose.yml   # Root Docker Compose
+└── 📄 .gitignore
+└── 📄 README.md
+
 
 
 ---
