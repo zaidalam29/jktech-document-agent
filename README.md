@@ -11,7 +11,7 @@
 <h1 align="center">🤖 JKTech Document Intelligence & Q&A System</h1>
 
 <h3 align="center">
-AI-driven search and content summarization • Vector Search • Production Ready
+AI-driven Search • Intelligent Summarization • Vector Search • Production Ready
 </h3>
 
 <p align="center">
@@ -19,8 +19,10 @@ AI-driven search and content summarization • Vector Search • Production Read
 Full Stack Developer | Gen AI/ML Engineer | RAG | Agentic AI
 </p>
 
-This project features a comprehensive **full-stack platform for document intelligence**, offering **AI-driven search and content summarization**.
-It includes a **backend built with FastAPI and PostgreSQL** and a **frontend using React and Nginx**, all fully dockerized for both local development and deployment.
+---
+JKTech Document Intelligence & Q&A System is a **full-stack AI-powered platform** designed for intelligent document processing, semantic search, and automated content understanding.
+
+The system enables users to upload documents and ask questions in natural language while leveraging **RAG (Retrieval-Augmented Generation)** and a **multi-agent AI architecture** for accurate and context-aware responses.
 ---
 
 ## Table of Contents
