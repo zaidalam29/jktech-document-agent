@@ -1,7 +1,23 @@
-# JKTech Document Intelligence & Q&A System
+<p align="center">
+  <img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi" alt="FastAPI">
+  <img src="https://img.shields.io/badge/OpenRouter-000000?style=for-the-badge&logo=googlechrome&logoColor=white" alt="OpenRouter">
+  <img src="https://img.shields.io/badge/Llama3-FF6F00?style=for-the-badge&logo=meta&logoColor=white" alt="Llama 3">
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
+</p>
 
-**Author:** Zaid Alam
-**Role:** Full Stack Developer & Generative AI/ML Engineer
+<h1 align="center">🤖 JKTech Document Intelligence & Q&A System</h1>
+
+<h3 align="center">
+AI-driven search and content summarization • Vector Search • Production Ready
+</h3>
+
+<p align="center">
+<b>Zaid Alam</b><br>
+Full Stack Developer | Gen AI/ML Engineer | RAG | Agentic AI
+</p>
 
 This project features a comprehensive **full-stack platform for document intelligence**, offering **AI-driven search and content summarization**.
 It includes a **backend built with FastAPI and PostgreSQL** and a **frontend using React and Nginx**, all fully dockerized for both local development and deployment.
