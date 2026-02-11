@@ -20,9 +20,7 @@ Full Stack Developer | Gen AI/ML Engineer | RAG | Agentic AI
 </p>
 
 ---
-JKTech Document Intelligence & Q&A System is a **full-stack AI-powered platform** designed for intelligent document processing, semantic search, and automated content understanding.
-
-The system enables users to upload documents and ask questions in natural language while leveraging **RAG (Retrieval-Augmented Generation)** and a **multi-agent AI architecture** for accurate and context-aware responses.
+JKTech Document Intelligence & Q&A System is a **full-stack AI-powered platform** designed for intelligent document processing, semantic search, and automated content understanding. The system enables users to upload documents and ask questions in natural language while leveraging **RAG (Retrieval-Augmented Generation)** and a **multi-agent AI architecture** for accurate and context-aware responses.
 ---
 
 ## Table of Contents
