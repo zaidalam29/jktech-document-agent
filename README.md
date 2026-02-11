@@ -18,7 +18,6 @@ AI-driven Search • Intelligent Summarization • Vector Search • Production 
 <b>Zaid Alam</b><br>
 Full Stack Developer | Gen AI/ML Engineer | RAG | Agentic AI
 </p>
----
 
 ## Table of Contents
 
